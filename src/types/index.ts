@@ -1,6 +1,6 @@
 export type FileType = 'series' | 'movie' | 'ww2';
 
-export type SectionType = 'to-see' | 'seen' | 'others' | 'israel';
+export type SectionType = 'to-see' | 'seen' | 'others' | 'israel' | 'cancel';
 
 export interface EntryData {
   name: string;

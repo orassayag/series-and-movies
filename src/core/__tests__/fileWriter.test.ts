@@ -44,16 +44,16 @@ describe('FileWriter', () => {
     await writer.writeFile('/test/file.txt', parsedFile);
     const expectedContent = `TO SEE:
 =======
-Black Mirror: 7 (הרוחש הארמ)
-The Boys: 1, 2, 3 (םינבה)
+Black Mirror: 7 (מראה שחורה)
+The Boys: 1, 2, 3 (הבנים)
 
 OTHERS TO SEE:
 ==============
-Some Series: 1 (werbeH)
+Some Series: 1 (Hebrew)
 
 SEEN:
 =====
-Dark: 1, 2, 3 (לפא)
+Dark: 1, 2, 3 (אפל)
 `;
     expect(vi.mocked(fs.writeFile)).toHaveBeenCalledWith(
       '/test/file.txt',
@@ -91,15 +91,15 @@ Dark: 1, 2, 3 (לפא)
     await writer.writeFile('/test/movies.txt', parsedFile);
     const expectedContent = `TO SEE:
 =======
-Interstellar 2014 (םיבכוכ ןיב)
+Interstellar 2014 (בין כוכבים)
 
 ISRAEL:
 =======
-Golda (film) 2023 (הדלוג)
+Golda (film) 2023 (גולדה)
 
 SEEN:
 =====
-The Matrix 1999 (סקירטמ)
+The Matrix 1999 (מטריקס)
 `;
     expect(vi.mocked(fs.writeFile)).toHaveBeenCalledWith(
       '/test/movies.txt',
@@ -133,7 +133,7 @@ The Matrix 1999 (סקירטמ)
 
 SEEN:
 =====
-Dark: 1, 2, 3 (לפא)
+Dark: 1, 2, 3 (אפל)
 `;
     expect(vi.mocked(fs.writeFile)).toHaveBeenCalledWith(
       '/test/file.txt',

@@ -7,9 +7,9 @@ const __dirname = dirname(__filename);
 const WORKSPACE_ROOT = join(__dirname, '..');
 
 export const settings: Settings = {
-  seriesFilePath: '/Users/orassayag/Downloads/to-see-series.txt',
-  moviesFilePath: '/Users/orassayag/Downloads/to-see-movies.txt',
-  ww2FilePath: '/Users/orassayag/Downloads/to-see-ww2.txt',
+  seriesFilePath: 'C:\\Users\\Or Assayag\\Dropbox\\or-life\\documents\\daily\\to-see-series.txt',
+  moviesFilePath: 'C:\\Users\\Or Assayag\\Dropbox\\or-life\\documents\\daily\\to-see-movies.txt',
+  ww2FilePath: 'C:\\Users\\Or Assayag\\Dropbox\\or-life\\documents\\daily\\to-see-ww2.txt',
   outputDir: join(WORKSPACE_ROOT, 'dist'),
   syncSeries: true,
   syncMovies: true,

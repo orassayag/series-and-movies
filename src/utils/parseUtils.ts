@@ -67,16 +67,22 @@ export function extractHebrew(line: string): string {
   return line.substring(lastOpenParen + 1, lastCloseParen).trim();
 }
 
-function reverseHebrewText(text: string): string {
+export function reverseHebrewText(text: string): string {
   if (!text) {
     return text;
   }
   return text.split('').reverse().join('');
 }
 
-export function formatEntry(name: string, year: number | undefined, seasons: number[], hebrew: string): string {
-  const reversedHebrew = hebrew ? reverseHebrewText(hebrew) : '';
-  const hebrewPart = reversedHebrew ? ` (${reversedHebrew})` : '';
+export function formatEntry(
+  name: string,
+  year: number | undefined,
+  seasons: number[],
+  hebrew: string,
+  reverse: boolean = false
+): string {
+  const processedHebrew = hebrew && reverse ? reverseHebrewText(hebrew) : hebrew;
+  const hebrewPart = processedHebrew ? ` (${processedHebrew})` : '';
   let namePart = name;
   if (year) {
     const yearStr = year.toString();

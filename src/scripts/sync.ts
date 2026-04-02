@@ -57,7 +57,7 @@ export async function sync() {
         result.removalResult.removedEntries.map((e) => ({ ...e, file: result.name }))
       );
       for (const entry of allRemoved) {
-        const formattedEntry = formatEntry(entry.name, entry.year, entry.seasons, entry.hebrew);
+        const formattedEntry = formatEntry(entry.name, entry.year, entry.seasons, entry.hebrew, true);
         const reasonText =
           entry.reason === 'duplicate-in-section'
             ? 'duplicate in same section'

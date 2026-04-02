@@ -34,6 +34,7 @@ export class CliPrompt {
             { name: 'To see', value: 'to-see' },
             { name: 'Seen', value: 'seen' },
             { name: 'Others to see', value: 'others' },
+            { name: 'Cancel', value: 'cancel' },
           ],
         },
       ]);
@@ -48,6 +49,7 @@ export class CliPrompt {
           choices: [
             { name: 'To see', value: 'to-see' },
             { name: 'Seen', value: 'seen' },
+            { name: 'Cancel', value: 'cancel' },
           ],
         },
       ]);

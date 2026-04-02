@@ -5,6 +5,7 @@ export {
   extractHebrew,
   formatEntry,
   parseSeasonInput,
+  reverseHebrewText,
 } from './parseUtils.js';
 
 export {

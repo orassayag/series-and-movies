@@ -1,17 +1,11 @@
 import { settings } from '../settings.js';
 import { FileScanner, CliPrompt, EntryManager, FileWriter } from '../core/index.js';
-import { getOutputPath, ensureDirectoryExists } from '../utils/index.js';
+import { getOutputPath, ensureDirectoryExists, reverseHebrewText } from '../utils/index.js';
 import { ParsedFile, FileType, AddedEntry, SectionType } from '../types/index.js';
-
-function reverseHebrewText(text: string): string {
-  if (!text) {
-    return text;
-  }
-  return text.split('').reverse().join('');
-}
 
 function formatEntryDisplay(entry: AddedEntry): string {
   const reversedHebrew = entry.hebrew ? reverseHebrewText(entry.hebrew) : '';
+  const hebrewPart = reversedHebrew ? ` (${reversedHebrew})` : '';
   let namePart = entry.name;
   if (entry.year) {
     const yearStr = entry.year.toString();
@@ -21,11 +15,9 @@ function formatEntryDisplay(entry: AddedEntry): string {
   }
   if (entry.seasons.length > 0) {
     const seasonsPart = entry.seasons.join(', ');
-    return reversedHebrew
-      ? `${namePart}: ${seasonsPart} (${reversedHebrew})`
-      : `${namePart}: ${seasonsPart}`;
+    return `${namePart}: ${seasonsPart}${hebrewPart}`;
   }
-  return reversedHebrew ? `${namePart} (${reversedHebrew})` : namePart;
+  return `${namePart}${hebrewPart}`;
 }
 
 function groupBySection(entries: AddedEntry[]): Record<SectionType, AddedEntry[]> {
@@ -45,8 +37,11 @@ async function addSingleEntry(
   fileType: FileType,
   manager: EntryManager,
   addedEntries: AddedEntry[]
-): Promise<AddedEntry> {
+): Promise<AddedEntry | null> {
   const sectionType = await prompt.promptSection(fileType);
+  if (sectionType === 'cancel') {
+    return null;
+  }
   const sectionData = targetFile.sections.get(sectionType) || {
     header: '',
     entries: [],
@@ -168,8 +163,10 @@ export async function add() {
       }
       try {
         const entry = await addSingleEntry(prompt, targetFile, fileType, manager, addedEntries);
-        addedEntries.push(entry);
-        console.log(`\nSuccessfully added/updated "${entry.name}" in ${entry.section} section.\n`);
+        if (entry) {
+          addedEntries.push(entry);
+          console.log(`\nSuccessfully added/updated "${entry.name}" in ${entry.section} section.\n`);
+        }
       } catch (error) {
         if (error instanceof Error) {
           console.error(`\nError: ${error.message}\n`);

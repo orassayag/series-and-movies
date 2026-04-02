@@ -110,12 +110,12 @@ describe('extractHebrew', () => {
 
 describe('formatEntry', () => {
   it('should format series with seasons and Hebrew', () => {
-    expect(formatEntry('Black Mirror', undefined, [7], 'מראה שחורה')).toBe('Black Mirror: 7 (הרוחש הארמ)');
-    expect(formatEntry('The Boys', 2024, [1, 2, 3], 'הבנים')).toBe('The Boys 2024: 1, 2, 3 (םינבה)');
+    expect(formatEntry('Black Mirror', undefined, [7], 'מראה שחורה')).toBe('Black Mirror: 7 (מראה שחורה)');
+    expect(formatEntry('The Boys', 2024, [1, 2, 3], 'הבנים')).toBe('The Boys 2024: 1, 2, 3 (הבנים)');
   });
 
   it('should format movie without seasons', () => {
-    expect(formatEntry('Interstellar', 2014, [], 'בין כוכבים')).toBe('Interstellar 2014 (םיבכוכ ןיב)');
+    expect(formatEntry('Interstellar', 2014, [], 'בין כוכבים')).toBe('Interstellar 2014 (בין כוכבים)');
   });
 
   it('should format entry without Hebrew', () => {
@@ -128,7 +128,7 @@ describe('formatEntry', () => {
   });
 
   it('should format entry without year', () => {
-    expect(formatEntry('Old Movie', undefined, [], 'סרט ישן')).toBe('Old Movie (ןשי טרס)');
+    expect(formatEntry('Old Movie', undefined, [], 'סרט ישן')).toBe('Old Movie (סרט ישן)');
   });
 });
 

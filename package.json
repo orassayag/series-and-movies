@@ -1,0 +1,53 @@
+{
+  "name": "series-and-movies",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "TypeScript CLI tool for managing series and movies watchlists with interactive bulk additions and smart duplicate removal",
+  "keywords": [
+    "series",
+    "movies",
+    "cli",
+    "typescript",
+    "watchlist",
+    "tv-shows",
+    "film-management",
+    "duplicate-removal",
+    "interactive-cli",
+    "bulk-addition",
+    "hebrew-support",
+    "file-management",
+    "nodejs"
+  ],
+  "author": "Or Assayag",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "scripts": {
+    "add": "tsx src/main.ts add",
+    "sync": "tsx src/main.ts sync",
+    "build": "tsc",
+    "test": "NODE_OPTIONS='--no-warnings' vitest run",
+    "test:watch": "NODE_OPTIONS='--no-warnings' vitest",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "prettier": "prettier --check 'src/**/*.ts'",
+    "prettier:fix": "prettier --write 'src/**/*.ts'"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.9",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.37.0",
+    "prettier": "^3.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.2",
+    "vitest": "^2.1.9"
+  },
+  "dependencies": {
+    "inquirer": "^9.3.8"
+  }
+}

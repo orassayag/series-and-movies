@@ -39,17 +39,16 @@ export async function sync() {
       ...result,
       removalResult: remover.removeDuplicates(result.parsedFile),
     }));
-    await ensureDirectoryExists(settings.outputDir);
     const writer = new FileWriter();
     for (const result of results) {
-      const outputPath = getOutputPath(result.sourcePath, settings.outputDir);
+      const outputPath = getOutputPath(result.sourcePath);
       await writer.writeFile(outputPath, result.removalResult.cleanedFile);
     }
     const totalRemoved = results.reduce(
       (sum, result) => sum + result.removalResult.removedEntries.length,
       0
     );
-    console.log(`===OUTPUT FILES WRITTEN TO: ${settings.outputDir}===`);
+    console.log(`\n===FILES UPDATED===`);
     console.log(`===DUPLICATES REMOVED: ${totalRemoved}===`);
     if (totalRemoved > 0) {
       console.log('===DUPLICATES:===');

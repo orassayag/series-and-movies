@@ -1,9 +1,8 @@
 import { join, basename } from 'path';
 import { mkdir } from 'fs/promises';
 
-export function getOutputPath(inputPath: string, outputDir: string): string {
-  const fileName = basename(inputPath);
-  return join(outputDir, fileName);
+export function getOutputPath(inputPath: string): string {
+  return inputPath;
 }
 
 export async function ensureDirectoryExists(dirPath: string): Promise<void> {

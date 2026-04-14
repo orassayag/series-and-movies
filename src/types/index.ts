@@ -22,7 +22,6 @@ export interface Settings {
   seriesFilePath: string;
   moviesFilePath: string;
   ww2FilePath: string;
-  outputDir: string;
   syncSeries: boolean;
   syncMovies: boolean;
   syncWW2: boolean;

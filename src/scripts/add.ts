@@ -201,8 +201,7 @@ export async function add() {
       return;
     }
     const writer = new FileWriter();
-    await ensureDirectoryExists(settings.outputDir);
-    const outputPath = getOutputPath(sourceFilePath, settings.outputDir);
+    const outputPath = getOutputPath(sourceFilePath);
     await writer.writeFile(outputPath, targetFile);
     for (const [section, entries] of Object.entries(grouped)) {
       console.log(`\nSuccessfully added/updated in ${section} section:`);
@@ -211,7 +210,7 @@ export async function add() {
         console.log(display);
       }
     }
-    console.log(`\nOutput written to: ${outputPath}`);
+    console.log(`\nFile updated: ${outputPath}`);
   } catch (error) {
     if (error instanceof Error) {
       console.error(`\nError: ${error.message}`);

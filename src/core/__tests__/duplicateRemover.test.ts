@@ -196,6 +196,114 @@ describe('DuplicateRemover', () => {
       expect(seen.entries.length).toBe(0);
       expect(result.removedEntries.length).toBe(1);
     });
+
+    it('should remove from ISRAEL if exists in TO SEE (higher priority)', () => {
+      const parsedFile: ParsedFile = {
+        sections: new Map<SectionType, ParsedSection>([
+          [
+            'to-see',
+            {
+              header: 'TO SEE:',
+              entries: [{ name: 'Golda', seasons: [], hebrew: 'גולדה' }],
+            },
+          ],
+          [
+            'israel',
+            {
+              header: 'ISRAEL:',
+              entries: [{ name: 'Golda', seasons: [], hebrew: 'גולדה' }],
+            },
+          ],
+        ]),
+      };
+      const result = remover.removeDuplicates(parsedFile);
+      const toSee = result.cleanedFile.sections.get('to-see')!;
+      const israel = result.cleanedFile.sections.get('israel')!;
+      expect(toSee.entries.length).toBe(1);
+      expect(israel.entries.length).toBe(0);
+    });
+  });
+
+  describe('removeCrossSectionDuplicates - Overlapping Series', () => {
+    it('should remove overlapping seasons from lower priority section', () => {
+      const parsedFile: ParsedFile = {
+        sections: new Map<SectionType, ParsedSection>([
+          [
+            'to-see',
+            {
+              header: 'TO SEE:',
+              entries: [{ name: 'Black Mirror', seasons: [1, 2, 3], hebrew: 'מראה שחורה' }],
+            },
+          ],
+          [
+            'seen',
+            {
+              header: 'SEEN:',
+              entries: [{ name: 'Black Mirror', seasons: [3, 4, 5], hebrew: 'מראה שחורה' }],
+            },
+          ],
+        ]),
+      };
+      const result = remover.removeDuplicates(parsedFile);
+      const toSee = result.cleanedFile.sections.get('to-see')!;
+      const seen = result.cleanedFile.sections.get('seen')!;
+      expect(toSee.entries[0].seasons).toEqual([1, 2, 3]);
+      expect(seen.entries[0].seasons).toEqual([4, 5]);
+      expect(result.removedEntries.length).toBe(0); // It was updated, not removed
+    });
+
+    it('should remove entire entry if all seasons overlap in higher priority', () => {
+      const parsedFile: ParsedFile = {
+        sections: new Map<SectionType, ParsedSection>([
+          [
+            'to-see',
+            {
+              header: 'TO SEE:',
+              entries: [{ name: 'Black Mirror', seasons: [1, 2, 3], hebrew: 'מראה שחורה' }],
+            },
+          ],
+          [
+            'seen',
+            {
+              header: 'SEEN:',
+              entries: [{ name: 'Black Mirror', seasons: [1, 2], hebrew: 'מראה שחורה' }],
+            },
+          ],
+        ]),
+      };
+      const result = remover.removeDuplicates(parsedFile);
+      const seen = result.cleanedFile.sections.get('seen')!;
+      expect(seen.entries.length).toBe(0);
+      expect(result.removedEntries.length).toBe(1);
+    });
+
+    it('should remove from higher priority if lower priority is already processed and matches', () => {
+      // This is a bit contrived but covers the case where firstPriority > secondPriority
+      // and seasons are equal
+      const parsedFile: ParsedFile = {
+        sections: new Map<SectionType, ParsedSection>([
+          [
+            'seen',
+            {
+              header: 'SEEN:',
+              entries: [{ name: 'Black Mirror', seasons: [1], hebrew: '' }],
+            },
+          ],
+          [
+            'to-see',
+            {
+              header: 'TO SEE:',
+              entries: [{ name: 'Black Mirror', seasons: [1], hebrew: '' }],
+            },
+          ],
+        ]),
+      };
+      const result = remover.removeDuplicates(parsedFile);
+      const toSee = result.cleanedFile.sections.get('to-see')!;
+      const seen = result.cleanedFile.sections.get('seen')!;
+      expect(toSee.entries.length).toBe(1);
+      expect(seen.entries.length).toBe(0);
+    });
   });
 
   describe('edge cases', () => {

@@ -1,6 +1,6 @@
 import { settings } from '../settings.js';
 import { FileScanner, FileWriter, DuplicateRemover } from '../core';
-import { formatEntry, getOutputPath, ensureDirectoryExists } from '../utils';
+import { formatEntry, getOutputPath } from '../utils';
 import { ParsedFile } from '../types';
 
 export async function sync() {

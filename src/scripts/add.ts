@@ -1,6 +1,6 @@
 import { settings } from '../settings.js';
 import { FileScanner, CliPrompt, EntryManager, FileWriter } from '../core/index.js';
-import { getOutputPath, ensureDirectoryExists, reverseHebrewText } from '../utils/index.js';
+import { getOutputPath, reverseHebrewText } from '../utils/index.js';
 import { ParsedFile, FileType, AddedEntry, SectionType } from '../types/index.js';
 
 function formatEntryDisplay(entry: AddedEntry): string {

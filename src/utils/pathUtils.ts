@@ -1,4 +1,3 @@
-import { join, basename } from 'path';
 import { mkdir } from 'fs/promises';
 
 export function getOutputPath(inputPath: string): string {

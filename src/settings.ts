@@ -1,10 +1,4 @@
 import { Settings } from './types';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const WORKSPACE_ROOT = join(__dirname, '..');
 
 export const settings: Settings = {
   seriesFilePath: 'C:\\Users\\Or Assayag\\Dropbox\\or-life\\documents\\daily\\to-see-series.txt',

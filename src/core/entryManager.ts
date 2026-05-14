@@ -19,7 +19,9 @@ export class EntryManager {
       const mergedSeasons = mergeSeasons(existingEntry.seasons, input.seasons);
       if (seasonsEqual(existingEntry.seasons, mergedSeasons)) {
         if (input.seasons.length === 0) {
-          throw new Error(`Entry "${input.name}" already exists in ${input.section}`);
+          throw new Error(
+            `Entry "${input.name}" already exists in ${input.section}`
+          );
         }
         throw new Error(
           `Entry "${input.name}" with seasons ${input.seasons.join(', ')} already exists in ${input.section}`
@@ -43,20 +45,25 @@ export class EntryManager {
     }
   }
   private getSectionHeader(section: SectionType): string {
-    const headers: Record<SectionType, string> = {
+    const headers: Record<Exclude<SectionType, 'cancel'>, string> = {
       'to-see': 'TO SEE:',
       seen: 'SEEN:',
       others: 'OTHERS TO SEE:',
       israel: 'ISRAEL:',
     };
-    return headers[section];
+    return headers[section as Exclude<SectionType, 'cancel'>];
   }
-  private checkDuplicateInOtherSections(parsedFile: ParsedFile, input: UserInput): void {
+  private checkDuplicateInOtherSections(
+    parsedFile: ParsedFile,
+    input: UserInput
+  ): void {
     for (const [sectionType, section] of parsedFile.sections.entries()) {
       if (sectionType === input.section) {
         continue;
       }
-      const existingEntryIndex = section.entries.findIndex((entry) => namesMatch(entry.name, input.name));
+      const existingEntryIndex = section.entries.findIndex((entry) =>
+        namesMatch(entry.name, input.name)
+      );
       if (existingEntryIndex !== -1) {
         const existingEntry = section.entries[existingEntryIndex];
         if (input.seasons.length === 0 && existingEntry.seasons.length === 0) {

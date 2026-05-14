@@ -1,6 +1,11 @@
 import { readFile } from 'fs/promises';
 import { ParsedFile, SectionType, ParsedSection, EntryData } from '../types';
-import { extractName, extractYear, extractSeasons, extractHebrew } from '../utils';
+import {
+  extractName,
+  extractYear,
+  extractSeasons,
+  extractHebrew,
+} from '../utils';
 
 const SECTION_HEADERS: Record<string, SectionType> = {
   'TO SEE:': 'to-see',
@@ -30,11 +35,20 @@ export class FileScanner {
         }
         continue;
       }
-      if (trimmed.includes('Copy these list') || trimmed.includes('WW2 movies')) {
+      if (
+        trimmed.includes('Copy these list') ||
+        trimmed.includes('WW2 movies')
+      ) {
         currentSection = null;
         continue;
       }
-      if (currentSection && trimmed && !trimmed.startsWith('=') && !trimmed.startsWith('-') && !trimmed.startsWith('http')) {
+      if (
+        currentSection &&
+        trimmed &&
+        !trimmed.startsWith('=') &&
+        !trimmed.startsWith('-') &&
+        !trimmed.startsWith('http')
+      ) {
         const name = extractName(trimmed);
         if (name) {
           const entry: EntryData = {

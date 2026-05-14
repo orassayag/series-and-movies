@@ -12,9 +12,21 @@ export async function sync() {
       sourcePath: string;
       shouldSync: boolean;
     }> = [
-      { name: 'series', sourcePath: settings.seriesFilePath, shouldSync: settings.syncSeries },
-      { name: 'movies', sourcePath: settings.moviesFilePath, shouldSync: settings.syncMovies },
-      { name: 'ww2', sourcePath: settings.ww2FilePath, shouldSync: settings.syncWW2 },
+      {
+        name: 'series',
+        sourcePath: settings.seriesFilePath,
+        shouldSync: settings.syncSeries,
+      },
+      {
+        name: 'movies',
+        sourcePath: settings.moviesFilePath,
+        shouldSync: settings.syncMovies,
+      },
+      {
+        name: 'ww2',
+        sourcePath: settings.ww2FilePath,
+        shouldSync: settings.syncWW2,
+      },
     ];
     const scanResults: Array<{
       name: string;
@@ -24,7 +36,11 @@ export async function sync() {
     for (const file of filesToSync) {
       if (file.shouldSync) {
         const parsedFile = await scanner.scanFile(file.sourcePath);
-        scanResults.push({ name: file.name, sourcePath: file.sourcePath, parsedFile });
+        scanResults.push({
+          name: file.name,
+          sourcePath: file.sourcePath,
+          parsedFile,
+        });
       } else {
         console.log(`Skipping ${file.name} (disabled in settings)`);
       }
@@ -53,15 +69,26 @@ export async function sync() {
     if (totalRemoved > 0) {
       console.log('===DUPLICATES:===');
       const allRemoved = results.flatMap((result) =>
-        result.removalResult.removedEntries.map((e) => ({ ...e, file: result.name }))
+        result.removalResult.removedEntries.map((e) => ({
+          ...e,
+          file: result.name,
+        }))
       );
       for (const entry of allRemoved) {
-        const formattedEntry = formatEntry(entry.name, entry.year, entry.seasons, entry.hebrew, true);
+        const formattedEntry = formatEntry(
+          entry.name,
+          entry.year,
+          entry.seasons,
+          entry.hebrew,
+          true
+        );
         const reasonText =
           entry.reason === 'duplicate-in-section'
             ? 'duplicate in same section'
             : `already in ${entry.section === 'to-see' ? 'higher priority section' : 'SEEN'}`;
-        console.log(`${formattedEntry} (${entry.section.toUpperCase()} - ${reasonText})`);
+        console.log(
+          `${formattedEntry} (${entry.section.toUpperCase()} - ${reasonText})`
+        );
       }
     }
   } catch (error) {

@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { EntryManager } from '../entryManager.js';
-import { ParsedFile, SectionType, ParsedSection, UserInput } from '../../types/index.js';
+import {
+  ParsedFile,
+  SectionType,
+  ParsedSection,
+  UserInput,
+} from '../../types/index.js';
 
 describe('EntryManager', () => {
   let manager: EntryManager;
@@ -14,8 +19,18 @@ describe('EntryManager', () => {
           {
             header: 'TO SEE:',
             entries: [
-              { name: 'Black Mirror', year: undefined, seasons: [1, 2], hebrew: 'מראה שחורה' },
-              { name: 'The Boys', year: undefined, seasons: [1, 2, 3], hebrew: 'הבנים' },
+              {
+                name: 'Black Mirror',
+                year: undefined,
+                seasons: [1, 2],
+                hebrew: 'מראה שחורה',
+              },
+              {
+                name: 'The Boys',
+                year: undefined,
+                seasons: [1, 2, 3],
+                hebrew: 'הבנים',
+              },
             ],
           },
         ],
@@ -23,7 +38,14 @@ describe('EntryManager', () => {
           'seen',
           {
             header: 'SEEN:',
-            entries: [{ name: 'Dark', year: undefined, seasons: [1, 2, 3], hebrew: 'אפל' }],
+            entries: [
+              {
+                name: 'Dark',
+                year: undefined,
+                seasons: [1, 2, 3],
+                hebrew: 'אפל',
+              },
+            ],
           },
         ],
       ]),
@@ -75,7 +97,9 @@ describe('EntryManager', () => {
         seasons: [1, 2],
         hebrew: 'מראה שחורה',
       };
-      expect(() => manager.addOrUpdateEntry(parsedFile, input)).toThrow('already exists in to-see');
+      expect(() => manager.addOrUpdateEntry(parsedFile, input)).toThrow(
+        'already exists in to-see'
+      );
     });
 
     it('should allow same name in different section with different seasons', () => {
@@ -104,8 +128,12 @@ describe('EntryManager', () => {
       manager.addOrUpdateEntry(parsedFile, input);
       const toSeeSection = parsedFile.sections.get('to-see')!;
       const seenSection = parsedFile.sections.get('seen')!;
-      expect(toSeeSection.entries.find((e) => e.name === 'Black Mirror')).toBeUndefined();
-      expect(seenSection.entries.find((e) => e.name === 'Black Mirror')).toBeDefined();
+      expect(
+        toSeeSection.entries.find((e) => e.name === 'Black Mirror')
+      ).toBeUndefined();
+      expect(
+        seenSection.entries.find((e) => e.name === 'Black Mirror')
+      ).toBeDefined();
     });
 
     it('should match names case-insensitively', () => {
@@ -141,7 +169,14 @@ describe('EntryManager', () => {
     it('should handle movies without seasons', () => {
       parsedFile.sections.set('to-see', {
         header: 'TO SEE:',
-        entries: [{ name: 'Interstellar', year: 2014, seasons: [], hebrew: 'בין כוכבים' }],
+        entries: [
+          {
+            name: 'Interstellar',
+            year: 2014,
+            seasons: [],
+            hebrew: 'בין כוכבים',
+          },
+        ],
       });
       const input: UserInput = {
         fileType: 'movie',
@@ -160,7 +195,14 @@ describe('EntryManager', () => {
     it('should move duplicate movie from one section to another', () => {
       parsedFile.sections.set('to-see', {
         header: 'TO SEE:',
-        entries: [{ name: 'Interstellar', year: 2014, seasons: [], hebrew: 'בין כוכבים' }],
+        entries: [
+          {
+            name: 'Interstellar',
+            year: 2014,
+            seasons: [],
+            hebrew: 'בין כוכבים',
+          },
+        ],
       });
       parsedFile.sections.set('seen', {
         header: 'SEEN:',
@@ -177,8 +219,12 @@ describe('EntryManager', () => {
       manager.addOrUpdateEntry(parsedFile, input);
       const toSeeSection = parsedFile.sections.get('to-see')!;
       const seenSection = parsedFile.sections.get('seen')!;
-      expect(toSeeSection.entries.find((e) => e.name === 'Interstellar')).toBeUndefined();
-      expect(seenSection.entries.find((e) => e.name === 'Interstellar')).toBeDefined();
+      expect(
+        toSeeSection.entries.find((e) => e.name === 'Interstellar')
+      ).toBeUndefined();
+      expect(
+        seenSection.entries.find((e) => e.name === 'Interstellar')
+      ).toBeDefined();
     });
   });
 });

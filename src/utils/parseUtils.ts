@@ -18,13 +18,19 @@ export function extractName(line: string): string {
   if (colonIndex === -1 || colonIndex > lastOpenParen) {
     return trimmed.substring(0, lastOpenParen).trim();
   }
-  const betweenColonAndParen = trimmed.substring(colonIndex + 1, lastOpenParen).trim();
+  const betweenColonAndParen = trimmed
+    .substring(colonIndex + 1, lastOpenParen)
+    .trim();
   if (/^[\d,\s]*$/.test(betweenColonAndParen)) {
     return trimmed.substring(0, colonIndex).trim();
   }
-  const lastColonBeforeParen = trimmed.substring(0, lastOpenParen).lastIndexOf(':');
+  const lastColonBeforeParen = trimmed
+    .substring(0, lastOpenParen)
+    .lastIndexOf(':');
   if (lastColonBeforeParen !== -1) {
-    const checkBetween = trimmed.substring(lastColonBeforeParen + 1, lastOpenParen).trim();
+    const checkBetween = trimmed
+      .substring(lastColonBeforeParen + 1, lastOpenParen)
+      .trim();
     if (/^[\d,\s]*$/.test(checkBetween)) {
       return trimmed.substring(0, lastColonBeforeParen).trim();
     }
@@ -61,7 +67,11 @@ export function extractSeasons(line: string): number[] {
 export function extractHebrew(line: string): string {
   const lastOpenParen = line.lastIndexOf('(');
   const lastCloseParen = line.lastIndexOf(')');
-  if (lastOpenParen === -1 || lastCloseParen === -1 || lastOpenParen >= lastCloseParen) {
+  if (
+    lastOpenParen === -1 ||
+    lastCloseParen === -1 ||
+    lastOpenParen >= lastCloseParen
+  ) {
     return '';
   }
   return line.substring(lastOpenParen + 1, lastCloseParen).trim();
@@ -81,7 +91,8 @@ export function formatEntry(
   hebrew: string,
   reverse: boolean = false
 ): string {
-  const processedHebrew = hebrew && reverse ? reverseHebrewText(hebrew) : hebrew;
+  const processedHebrew =
+    hebrew && reverse ? reverseHebrewText(hebrew) : hebrew;
   const hebrewPart = processedHebrew ? ` (${processedHebrew})` : '';
   let namePart = name;
   if (year) {

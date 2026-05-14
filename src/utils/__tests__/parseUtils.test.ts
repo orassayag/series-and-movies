@@ -6,6 +6,7 @@ import {
   extractHebrew,
   formatEntry,
   parseSeasonInput,
+  reverseHebrewText,
 } from '../parseUtils.js';
 
 describe('extractName', () => {
@@ -15,11 +16,15 @@ describe('extractName', () => {
   });
 
   it('should extract name from series without seasons', () => {
-    expect(extractName('Dune: Prophecy: (חולית: הנבואה)')).toBe('Dune: Prophecy');
+    expect(extractName('Dune: Prophecy: (חולית: הנבואה)')).toBe(
+      'Dune: Prophecy'
+    );
   });
 
   it('should extract name from movie', () => {
-    expect(extractName('Interstellar 2014 (בין כוכבים)')).toBe('Interstellar 2014');
+    expect(extractName('Interstellar 2014 (בין כוכבים)')).toBe(
+      'Interstellar 2014'
+    );
     expect(extractName('The Matrix 1999 (מטריקס)')).toBe('The Matrix 1999');
   });
 
@@ -35,6 +40,14 @@ describe('extractName', () => {
 
   it('should handle entries with only name', () => {
     expect(extractName('Simple Name')).toBe('Simple Name');
+  });
+
+  it('should handle colon after Hebrew parentheses', () => {
+    expect(extractName('Name (Hebrew): 1, 2')).toBe('Name');
+  });
+
+  it('should handle entries where colon is after parentheses', () => {
+    expect(extractName('Name (Hebrew) : 1')).toBe('Name');
   });
 });
 
@@ -59,10 +72,12 @@ describe('extractYear', () => {
 describe('extractSeasons', () => {
   it('should extract seasons from series', () => {
     expect(extractSeasons('Black Mirror: 7 (מראה שחורה)')).toEqual([7]);
-    expect(extractSeasons('The Boys: 1, 2, 3, 4, 5, 6 (הבנים)')).toEqual([1, 2, 3, 4, 5, 6]);
-    expect(extractSeasons('Rick and Morty: 2, 3, 4, 5, 6, 7 (ריק ומורטי)')).toEqual([
-      2, 3, 4, 5, 6, 7,
+    expect(extractSeasons('The Boys: 1, 2, 3, 4, 5, 6 (הבנים)')).toEqual([
+      1, 2, 3, 4, 5, 6,
     ]);
+    expect(
+      extractSeasons('Rick and Morty: 2, 3, 4, 5, 6, 7 (ריק ומורטי)')
+    ).toEqual([2, 3, 4, 5, 6, 7]);
   });
 
   it('should return empty array for entries without colon', () => {
@@ -104,31 +119,56 @@ describe('extractHebrew', () => {
   });
 
   it('should handle multiple colons in Hebrew', () => {
-    expect(extractHebrew('Dune: Prophecy: (חולית: הנבואה)')).toBe('חולית: הנבואה');
+    expect(extractHebrew('Dune: Prophecy: (חולית: הנבואה)')).toBe(
+      'חולית: הנבואה'
+    );
+  });
+});
+
+describe('reverseHebrewText', () => {
+  it('should reverse Hebrew text', () => {
+    expect(reverseHebrewText('אבג')).toBe('גבא');
+  });
+
+  it('should handle empty or undefined input', () => {
+    expect(reverseHebrewText('')).toBe('');
+    expect(reverseHebrewText(null as any)).toBe(null);
   });
 });
 
 describe('formatEntry', () => {
   it('should format series with seasons and Hebrew', () => {
-    expect(formatEntry('Black Mirror', undefined, [7], 'מראה שחורה')).toBe('Black Mirror: 7 (מראה שחורה)');
-    expect(formatEntry('The Boys', 2024, [1, 2, 3], 'הבנים')).toBe('The Boys 2024: 1, 2, 3 (הבנים)');
+    expect(formatEntry('Black Mirror', undefined, [7], 'מראה שחורה')).toBe(
+      'Black Mirror: 7 (מראה שחורה)'
+    );
+    expect(formatEntry('The Boys', 2024, [1, 2, 3], 'הבנים')).toBe(
+      'The Boys 2024: 1, 2, 3 (הבנים)'
+    );
   });
 
   it('should format movie without seasons', () => {
-    expect(formatEntry('Interstellar', 2014, [], 'בין כוכבים')).toBe('Interstellar 2014 (בין כוכבים)');
+    expect(formatEntry('Interstellar', 2014, [], 'בין כוכבים')).toBe(
+      'Interstellar 2014 (בין כוכבים)'
+    );
   });
 
   it('should format entry without Hebrew', () => {
-    expect(formatEntry('Series Name', 2023, [1, 2], '')).toBe('Series Name 2023: 1, 2');
+    expect(formatEntry('Series Name', 2023, [1, 2], '')).toBe(
+      'Series Name 2023: 1, 2'
+    );
     expect(formatEntry('Movie Name', 2020, [], '')).toBe('Movie Name 2020');
   });
 
   it('should format series without Hebrew', () => {
-    expect(formatEntry('Some Series', undefined, [1, 2, 3], '')).toBe('Some Series: 1, 2, 3');
+    expect(formatEntry('Some Series', undefined, [1, 2, 3], '')).toBe(
+      'Some Series: 1, 2, 3'
+    );
   });
 
   it('should format entry without year', () => {
-    expect(formatEntry('Old Movie', undefined, [], 'סרט ישן')).toBe('Old Movie (סרט ישן)');
+    expect(formatEntry('Old Movie', undefined, [], 'סרט ישן')).toBe(
+      'Old Movie (סרט ישן)'
+    );
   });
 });
 
@@ -155,7 +195,9 @@ describe('parseSeasonInput', () => {
   });
 
   it('should throw error for negative numbers', () => {
-    expect(() => parseSeasonInput('1, -2, 3')).toThrow('Seasons cannot be negative numbers');
+    expect(() => parseSeasonInput('1, -2, 3')).toThrow(
+      'Seasons cannot be negative numbers'
+    );
   });
 
   it('should throw error for zero', () => {
@@ -165,7 +207,9 @@ describe('parseSeasonInput', () => {
   });
 
   it('should throw error for season numbers above 1000', () => {
-    expect(() => parseSeasonInput('1, 1001, 2')).toThrow('Season numbers must be between 1 and 1000');
+    expect(() => parseSeasonInput('1, 1001, 2')).toThrow(
+      'Season numbers must be between 1 and 1000'
+    );
   });
 
   it('should accept season 1000', () => {

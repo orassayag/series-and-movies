@@ -18,3 +18,5 @@ export {
 } from './validationUtils.js';
 
 export { getOutputPath, ensureDirectoryExists } from './pathUtils.js';
+
+export { select, input } from './prompts.js';

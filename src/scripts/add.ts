@@ -1,7 +1,17 @@
 import { settings } from '../settings.js';
-import { FileScanner, CliPrompt, EntryManager, FileWriter } from '../core/index.js';
+import {
+  FileScanner,
+  CliPrompt,
+  EntryManager,
+  FileWriter,
+} from '../core/index.js';
 import { getOutputPath, reverseHebrewText } from '../utils/index.js';
-import { ParsedFile, FileType, AddedEntry, SectionType } from '../types/index.js';
+import {
+  ParsedFile,
+  FileType,
+  AddedEntry,
+  SectionType,
+} from '../types/index.js';
 
 function formatEntryDisplay(entry: AddedEntry): string {
   const reversedHebrew = entry.hebrew ? reverseHebrewText(entry.hebrew) : '';
@@ -20,7 +30,9 @@ function formatEntryDisplay(entry: AddedEntry): string {
   return `${namePart}${hebrewPart}`;
 }
 
-function groupBySection(entries: AddedEntry[]): Record<SectionType, AddedEntry[]> {
+function groupBySection(
+  entries: AddedEntry[]
+): Record<SectionType, AddedEntry[]> {
   const grouped: Partial<Record<SectionType, AddedEntry[]>> = {};
   for (const entry of entries) {
     if (!grouped[entry.section]) {
@@ -55,7 +67,10 @@ async function addSingleEntry(
       if (normalizedEntry === normalizedInput) {
         return true;
       }
-      if (fileType !== 'series' && normalizedEntry.startsWith(normalizedInput + ' ')) {
+      if (
+        fileType !== 'series' &&
+        normalizedEntry.startsWith(normalizedInput + ' ')
+      ) {
         const afterName = normalizedEntry.substring(normalizedInput.length + 1);
         if (/^\d{4}$/.test(afterName)) {
           return true;
@@ -77,10 +92,12 @@ async function addSingleEntry(
       }
     }
   }
-  const existingEntry = existingInTargetSection || existingEntryFromOtherSection;
-  const year = fileType !== 'series' 
-    ? (existingEntry?.year || await prompt.promptYear())
-    : 0;
+  const existingEntry =
+    existingInTargetSection || existingEntryFromOtherSection;
+  const year =
+    fileType !== 'series'
+      ? existingEntry?.year || (await prompt.promptYear())
+      : 0;
   const alreadyAddedInSession = addedEntries.find((entry) => {
     const normalize = (str: string) => str.toLowerCase().trim();
     if (fileType === 'series') {
@@ -106,10 +123,12 @@ async function addSingleEntry(
     );
   }
   if (existingInTargetSection && fileType !== 'series') {
-    throw new Error(`Movie "${existingInTargetSection.name}" already exists in ${sectionType} section`);
+    throw new Error(
+      `Movie "${existingInTargetSection.name}" already exists in ${sectionType} section`
+    );
   }
   const seasons = fileType === 'series' ? await prompt.promptSeasons() : [];
-  const hebrew = existingEntry?.hebrew || await prompt.promptHebrew();
+  const hebrew = existingEntry?.hebrew || (await prompt.promptHebrew());
   const finalName = existingEntry?.name || name;
   const input = {
     fileType,
@@ -157,15 +176,25 @@ export async function add() {
     const MAX_BULK_ENTRIES = 100;
     while (continueAdding) {
       if (addedEntries.length >= MAX_BULK_ENTRIES) {
-        console.log(`\nMaximum bulk limit reached (${MAX_BULK_ENTRIES} entries).`);
+        console.log(
+          `\nMaximum bulk limit reached (${MAX_BULK_ENTRIES} entries).`
+        );
         console.log('Changes will now be saved.');
         break;
       }
       try {
-        const entry = await addSingleEntry(prompt, targetFile, fileType, manager, addedEntries);
+        const entry = await addSingleEntry(
+          prompt,
+          targetFile,
+          fileType,
+          manager,
+          addedEntries
+        );
         if (entry) {
           addedEntries.push(entry);
-          console.log(`\nSuccessfully added/updated "${entry.name}" in ${entry.section} section.\n`);
+          console.log(
+            `\nSuccessfully added/updated "${entry.name}" in ${entry.section} section.\n`
+          );
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -179,7 +208,12 @@ export async function add() {
       }
     }
     if (addedEntries.length === 0) {
-      const label = fileType === 'series' ? 'Series' : fileType === 'movie' ? 'Movies' : 'WW2 movies';
+      const label =
+        fileType === 'series'
+          ? 'Series'
+          : fileType === 'movie'
+            ? 'Movies'
+            : 'WW2 movies';
       console.log(`\nNo ${label} were added.`);
       return;
     }

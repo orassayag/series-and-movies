@@ -20,8 +20,18 @@ describe('FileWriter', () => {
           {
             header: 'TO SEE:',
             entries: [
-              { name: 'Black Mirror', year: undefined, seasons: [7], hebrew: 'מראה שחורה' },
-              { name: 'The Boys', year: undefined, seasons: [1, 2, 3], hebrew: 'הבנים' },
+              {
+                name: 'Black Mirror',
+                year: undefined,
+                seasons: [7],
+                hebrew: 'מראה שחורה',
+              },
+              {
+                name: 'The Boys',
+                year: undefined,
+                seasons: [1, 2, 3],
+                hebrew: 'הבנים',
+              },
             ],
           },
         ],
@@ -29,14 +39,28 @@ describe('FileWriter', () => {
           'others',
           {
             header: 'OTHERS TO SEE:',
-            entries: [{ name: 'Some Series', year: undefined, seasons: [1], hebrew: 'Hebrew' }],
+            entries: [
+              {
+                name: 'Some Series',
+                year: undefined,
+                seasons: [1],
+                hebrew: 'Hebrew',
+              },
+            ],
           },
         ],
         [
           'seen',
           {
             header: 'SEEN:',
-            entries: [{ name: 'Dark', year: undefined, seasons: [1, 2, 3], hebrew: 'אפל' }],
+            entries: [
+              {
+                name: 'Dark',
+                year: undefined,
+                seasons: [1, 2, 3],
+                hebrew: 'אפל',
+              },
+            ],
           },
         ],
       ]),
@@ -69,21 +93,42 @@ Dark: 1, 2, 3 (אפל)
           'to-see',
           {
             header: 'TO SEE:',
-            entries: [{ name: 'Interstellar 2014', year: 2014, seasons: [], hebrew: 'בין כוכבים' }],
+            entries: [
+              {
+                name: 'Interstellar 2014',
+                year: 2014,
+                seasons: [],
+                hebrew: 'בין כוכבים',
+              },
+            ],
           },
         ],
         [
           'israel',
           {
             header: 'ISRAEL:',
-            entries: [{ name: 'Golda (film) 2023', year: 2023, seasons: [], hebrew: 'גולדה' }],
+            entries: [
+              {
+                name: 'Golda (film) 2023',
+                year: 2023,
+                seasons: [],
+                hebrew: 'גולדה',
+              },
+            ],
           },
         ],
         [
           'seen',
           {
             header: 'SEEN:',
-            entries: [{ name: 'The Matrix 1999', year: 1999, seasons: [], hebrew: 'מטריקס' }],
+            entries: [
+              {
+                name: 'The Matrix 1999',
+                year: 1999,
+                seasons: [],
+                hebrew: 'מטריקס',
+              },
+            ],
           },
         ],
       ]),
@@ -122,7 +167,14 @@ The Matrix 1999 (מטריקס)
           'seen',
           {
             header: 'SEEN:',
-            entries: [{ name: 'Dark', year: undefined, seasons: [1, 2, 3], hebrew: 'אפל' }],
+            entries: [
+              {
+                name: 'Dark',
+                year: undefined,
+                seasons: [1, 2, 3],
+                hebrew: 'אפל',
+              },
+            ],
           },
         ],
       ]),
@@ -150,8 +202,18 @@ Dark: 1, 2, 3 (אפל)
           {
             header: 'TO SEE:',
             entries: [
-              { name: 'Black Mirror', year: undefined, seasons: [7], hebrew: '' },
-              { name: 'The Boys', year: undefined, seasons: [1, 2, 3], hebrew: '' },
+              {
+                name: 'Black Mirror',
+                year: undefined,
+                seasons: [7],
+                hebrew: '',
+              },
+              {
+                name: 'The Boys',
+                year: undefined,
+                seasons: [1, 2, 3],
+                hebrew: '',
+              },
             ],
           },
         ],
@@ -177,14 +239,23 @@ The Boys: 1, 2, 3
           'seen',
           {
             header: 'SEEN:',
-            entries: [{ name: 'Dark', year: undefined, seasons: [1], hebrew: '' }],
+            entries: [
+              { name: 'Dark', year: undefined, seasons: [1], hebrew: '' },
+            ],
           },
         ],
         [
           'to-see',
           {
             header: 'TO SEE:',
-            entries: [{ name: 'Black Mirror', year: undefined, seasons: [1], hebrew: '' }],
+            entries: [
+              {
+                name: 'Black Mirror',
+                year: undefined,
+                seasons: [1],
+                hebrew: '',
+              },
+            ],
           },
         ],
       ]),

@@ -1,3 +1,46 @@
 {
-  "cSpell.words": ["Assayag", "orassayag", "מראה", "שחורה"]
+  "cSpell.words": [
+    "Assayag",
+    "Bashir",
+    "Dahmer",
+    "Dups",
+    "msvc",
+    "orassayag",
+    "typescriptlang",
+    "watchlist",
+    "watchlists",
+    "Westworld",
+    "באשיר",
+    "גולדה",
+    "דאהמר",
+    "האלווין",
+    "הבנים",
+    "המטריקס",
+    "המערב",
+    "הנבואה",
+    "התחלה",
+    "ואלס",
+    "חדשה",
+    "חולית",
+    "טקסט",
+    "כוכבים",
+    "כפול",
+    "מטריקס",
+    "מפלצת",
+    "מראה",
+    "סדרה",
+    "סיפורו",
+    "עולם",
+    "שובר",
+    "שורות",
+    "שחורה",
+    "תרגום"
+  ],
+  "cSpell.ignorePaths": [
+    "coverage",
+    "node_modules",
+    "dist",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml"
+  ]
 }

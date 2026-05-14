@@ -91,14 +91,18 @@ describe('DuplicateRemover', () => {
             'to-see',
             {
               header: 'TO SEE:',
-              entries: [{ name: 'Black Mirror', seasons: [3, 4], hebrew: 'מראה שחורה' }],
+              entries: [
+                { name: 'Black Mirror', seasons: [3, 4], hebrew: 'מראה שחורה' },
+              ],
             },
           ],
           [
             'seen',
             {
               header: 'SEEN:',
-              entries: [{ name: 'Black Mirror', seasons: [1, 2], hebrew: 'מראה שחורה' }],
+              entries: [
+                { name: 'Black Mirror', seasons: [1, 2], hebrew: 'מראה שחורה' },
+              ],
             },
           ],
         ]),
@@ -118,14 +122,18 @@ describe('DuplicateRemover', () => {
             'to-see',
             {
               header: 'TO SEE:',
-              entries: [{ name: 'Black Mirror', seasons: [1, 2], hebrew: 'מראה שחורה' }],
+              entries: [
+                { name: 'Black Mirror', seasons: [1, 2], hebrew: 'מראה שחורה' },
+              ],
             },
           ],
           [
             'seen',
             {
               header: 'SEEN:',
-              entries: [{ name: 'Black Mirror', seasons: [1, 2], hebrew: 'מראה שחורה' }],
+              entries: [
+                { name: 'Black Mirror', seasons: [1, 2], hebrew: 'מראה שחורה' },
+              ],
             },
           ],
         ]),
@@ -149,14 +157,18 @@ describe('DuplicateRemover', () => {
             'to-see',
             {
               header: 'TO SEE:',
-              entries: [{ name: 'Interstellar', seasons: [], hebrew: 'בין כוכבים' }],
+              entries: [
+                { name: 'Interstellar', seasons: [], hebrew: 'בין כוכבים' },
+              ],
             },
           ],
           [
             'seen',
             {
               header: 'SEEN:',
-              entries: [{ name: 'Interstellar', seasons: [], hebrew: 'בין כוכבים' }],
+              entries: [
+                { name: 'Interstellar', seasons: [], hebrew: 'בין כוכבים' },
+              ],
             },
           ],
         ]),
@@ -232,14 +244,26 @@ describe('DuplicateRemover', () => {
             'to-see',
             {
               header: 'TO SEE:',
-              entries: [{ name: 'Black Mirror', seasons: [1, 2, 3], hebrew: 'מראה שחורה' }],
+              entries: [
+                {
+                  name: 'Black Mirror',
+                  seasons: [1, 2, 3],
+                  hebrew: 'מראה שחורה',
+                },
+              ],
             },
           ],
           [
             'seen',
             {
               header: 'SEEN:',
-              entries: [{ name: 'Black Mirror', seasons: [3, 4, 5], hebrew: 'מראה שחורה' }],
+              entries: [
+                {
+                  name: 'Black Mirror',
+                  seasons: [3, 4, 5],
+                  hebrew: 'מראה שחורה',
+                },
+              ],
             },
           ],
         ]),
@@ -259,14 +283,22 @@ describe('DuplicateRemover', () => {
             'to-see',
             {
               header: 'TO SEE:',
-              entries: [{ name: 'Black Mirror', seasons: [1, 2, 3], hebrew: 'מראה שחורה' }],
+              entries: [
+                {
+                  name: 'Black Mirror',
+                  seasons: [1, 2, 3],
+                  hebrew: 'מראה שחורה',
+                },
+              ],
             },
           ],
           [
             'seen',
             {
               header: 'SEEN:',
-              entries: [{ name: 'Black Mirror', seasons: [1, 2], hebrew: 'מראה שחורה' }],
+              entries: [
+                { name: 'Black Mirror', seasons: [1, 2], hebrew: 'מראה שחורה' },
+              ],
             },
           ],
         ]),
@@ -356,14 +388,18 @@ describe('DuplicateRemover', () => {
             'to-see',
             {
               header: 'TO SEE:',
-              entries: [{ name: 'Black Mirror', seasons: [1, 2, 3], hebrew: '' }],
+              entries: [
+                { name: 'Black Mirror', seasons: [1, 2, 3], hebrew: '' },
+              ],
             },
           ],
           [
             'seen',
             {
               header: 'SEEN:',
-              entries: [{ name: 'Black Mirror', seasons: [3, 4, 5], hebrew: '' }],
+              entries: [
+                { name: 'Black Mirror', seasons: [3, 4, 5], hebrew: '' },
+              ],
             },
           ],
         ]),
@@ -430,8 +466,12 @@ describe('DuplicateRemover', () => {
       const result = remover.removeDuplicates(parsedFile);
       expect(result.cleanedFile.sections.get('to-see')!.entries.length).toBe(1);
       expect(result.cleanedFile.sections.get('seen')!.entries.length).toBe(1);
-      expect(result.cleanedFile.sections.get('to-see')!.entries[0].seasons).toEqual([1, 2]);
-      expect(result.cleanedFile.sections.get('seen')!.entries[0].seasons).toEqual([5, 6]);
+      expect(
+        result.cleanedFile.sections.get('to-see')!.entries[0].seasons
+      ).toEqual([1, 2]);
+      expect(
+        result.cleanedFile.sections.get('seen')!.entries[0].seasons
+      ).toEqual([5, 6]);
       expect(result.removedEntries.length).toBe(0);
     });
   });

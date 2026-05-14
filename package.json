@@ -1,9 +1,8 @@
 {
   "name": "series-and-movies",
   "version": "1.0.0",
-  "type": "module",
-  "private": true,
-  "description": "TypeScript CLI tool for managing series and movies watchlists with interactive bulk additions and smart duplicate removal",
+  "private": false,
+  "description": "A TypeScript CLI tool for managing series and movie watchlists across text files with interactive prompts, bulk additions and duplicate removal. Streamlines watchlist organization, supports bulk updates, prevents duplicate entries and provides efficient tracking and maintenance across multiple files",
   "keywords": [
     "series",
     "movies",
@@ -19,38 +18,88 @@
     "file-management",
     "nodejs"
   ],
-  "author": "Or Assayag",
-  "license": "MIT",
-  "engines": {
-    "node": ">=18.0.0",
-    "pnpm": ">=8.0.0"
+  "homepage": "https://github.com/orassayag/series-and-movies#readme",
+  "bugs": {
+    "url": "https://github.com/orassayag/series-and-movies/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/orassayag/series-and-movies.git"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/orassayag"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Or Assayag",
+    "email": "orassayag@gmail.com",
+    "url": "https://github.com/orassayag"
+  },
+  "contributors": [
+    {
+      "name": "Or Assayag",
+      "email": "orassayag@gmail.com",
+      "url": "https://github.com/orassayag"
+    }
+  ],
+  "type": "module",
+  "main": "src/main.ts",
+  "files": [
+    ".github",
+    ".pnpm-store",
+    ".vscode",
+    "dist",
+    "one-time-scripts",
+    "src",
+    ".gitignore",
+    ".prettierrc",
+    ".prettierrc.json",
+    "CHANGELOG.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "eslint.config.mjs",
+    "INSTRUCTIONS.md",
+    "LICENSE",
+    "package.json",
+    "pnpm-lock.yaml",
+    "README.md",
+    "SECURITY.md",
+    "seriesAndMovies.bat",
+    "tsconfig.json",
+    "tsconfig.node.json",
+    "vitest.config.ts"
+  ],
   "scripts": {
     "add": "tsx src/main.ts add",
-    "sync": "tsx src/main.ts sync",
     "build": "tsc",
-    "test": "cross-env NODE_OPTIONS='--no-warnings' vitest run --coverage",
-    "test:watch": "cross-env NODE_OPTIONS='--no-warnings' vitest",
-    "test:no-coverage": "cross-env NODE_OPTIONS='--no-warnings' vitest run",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "prettier": "prettier --check 'src/**/*.ts'",
-    "prettier:fix": "prettier --write 'src/**/*.ts'"
-  },
-  "devDependencies": {
-    "@types/inquirer": "^9.0.9",
-    "@types/node": "^20.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "@vitest/coverage-istanbul": "^2.1.9",
-    "cross-env": "^10.1.0",
-    "eslint": "^8.37.0",
-    "prettier": "^3.0.0",
-    "tsx": "^4.0.0",
-    "typescript": "^5.0.2",
-    "vitest": "^2.1.9"
+    "prettier:fix": "prettier --write 'src/**/*.ts'",
+    "sync": "tsx src/main.ts sync",
+    "test": "cross-env NODE_OPTIONS='--no-warnings' vitest run --coverage",
+    "test:no-coverage": "cross-env NODE_OPTIONS='--no-warnings' vitest run",
+    "test:watch": "cross-env NODE_OPTIONS='--no-warnings' vitest"
   },
   "dependencies": {
-    "inquirer": "^9.3.8"
+    "enquirer": "^2.4.1"
+  },
+  "devDependencies": {
+    "@rolldown/binding-win32-x64-msvc": "^1.0.1",
+    "@types/node": "^25.7.0",
+    "@typescript-eslint/eslint-plugin": "^8.59.3",
+    "@typescript-eslint/parser": "^8.59.3",
+    "@vitest/coverage-istanbul": "^4.1.6",
+    "cross-env": "^10.1.0",
+    "eslint": "^10.3.0",
+    "prettier": "^3.8.3",
+    "tsx": "^4.21.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
   }
 }

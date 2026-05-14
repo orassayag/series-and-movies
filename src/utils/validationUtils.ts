@@ -3,7 +3,9 @@ export function normalizeNameForComparison(name: string): string {
 }
 
 export function namesMatch(name1: string, name2: string): boolean {
-  return normalizeNameForComparison(name1) === normalizeNameForComparison(name2);
+  return (
+    normalizeNameForComparison(name1) === normalizeNameForComparison(name2)
+  );
 }
 
 export function validateNonEmpty(input: string): boolean {
@@ -18,7 +20,10 @@ export function isValidHebrew(text: string): boolean {
   return hebrewRegex.test(text);
 }
 
-export function mergeSeasons(existing: number[], newSeasons: number[]): number[] {
+export function mergeSeasons(
+  existing: number[],
+  newSeasons: number[]
+): number[] {
   const combined = [...existing, ...newSeasons];
   return [...new Set(combined)].sort((a, b) => a - b);
 }

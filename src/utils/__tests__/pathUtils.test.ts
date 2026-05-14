@@ -36,7 +36,9 @@ describe('pathUtils', () => {
       error.code = 'EACCES';
       vi.mocked(mkdir).mockRejectedValueOnce(error);
 
-      await expect(ensureDirectoryExists(dirPath)).rejects.toThrow('Permission denied');
+      await expect(ensureDirectoryExists(dirPath)).rejects.toThrow(
+        'Permission denied'
+      );
     });
 
     it('should throw if error is not an Error instance', async () => {

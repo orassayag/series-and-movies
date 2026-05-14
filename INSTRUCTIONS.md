@@ -1,44 +1,70 @@
-# Instructions for Series and Movies Manager
+# Setup and Usage Instructions
 
-This document provides detailed instructions for using the Series and Movies Manager CLI tool.
+This document provides detailed instructions for setting up and using the Series and Movies Manager CLI tool.
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Configuration](#configuration)
+- [Prerequisites](#prerequisites)
+- [Initial Setup](#initial-setup)
+- [Available Commands](#available-commands)
 - [Add Script](#add-script)
 - [Sync Script](#sync-script)
 - [File Format](#file-format)
 - [Common Workflows](#common-workflows)
+- [Extending the Application](#extending-the-application)
 - [Troubleshooting](#troubleshooting)
 - [Best Practices](#best-practices)
+- [External Resources](#external-resources)
+- [Author](#author)
 
-## Installation
+## Prerequisites
 
-### Prerequisites
+### System Requirements
 
-- Node.js >= 18.0.0
-- pnpm >= 8.0.0
+- **Node.js**: Version 18.0.0 or higher
+- **Package Manager**: pnpm (recommended) or npm
+- **Operating System**: Windows, macOS, or Linux
+- **Disk Space**: Minimal (mostly for dependencies and text files)
 
-### Setup
+## Initial Setup
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/series-and-movies.git
-   cd series-and-movies
-   ```
+### 1. Clone the repository
 
-2. Install dependencies:
-   ```bash
-   pnpm install
-   ```
+```bash
+git clone https://github.com/orassayag/series-and-movies.git
+cd series-and-movies
+```
 
-3. Build the project:
-   ```bash
-   pnpm build
-   ```
+### 2. Install Dependencies
 
-4. Configure your file paths in `src/settings.ts`
+Using pnpm (recommended):
+
+```bash
+pnpm install
+```
+
+### 3. Build the project
+
+```bash
+pnpm build
+```
+
+### 4. Configure your file paths in `src/settings.ts`
+
+## Available Commands
+
+### Development Commands
+
+- `pnpm run build`: Compile TypeScript source code to JavaScript.
+- `pnpm test`: Run the test suite using Vitest.
+- `pnpm test:watch`: Run tests in watch mode.
+- `pnpm run lint`: Check for linting issues.
+- `pnpm run prettier:fix`: Format the codebase.
+
+### Running Scripts
+
+- `pnpm run add`: Start the interactive wizard to add series or movies.
+- `pnpm run sync`: Run the duplicate removal and cleanup script.
 
 ## Configuration
 
@@ -50,10 +76,10 @@ export const settings: Settings = {
   seriesFilePath: '/Users/username/Downloads/to-see-series.txt',
   moviesFilePath: '/Users/username/Downloads/to-see-movies.txt',
   ww2FilePath: '/Users/username/Downloads/to-see-ww2.txt',
-  
+
   // Output directory (generated files)
   outputDir: join(WORKSPACE_ROOT, 'dist'),
-  
+
   // Sync toggles (enable/disable per file type)
   syncSeries: true,
   syncMovies: true,
@@ -63,15 +89,15 @@ export const settings: Settings = {
 
 ### Configuration Options
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `seriesFilePath` | string | Path to series text file |
-| `moviesFilePath` | string | Path to movies text file |
-| `ww2FilePath` | string | Path to WW2 movies text file |
-| `outputDir` | string | Directory for output files (default: `dist/`) |
-| `syncSeries` | boolean | Enable/disable series file syncing |
-| `syncMovies` | boolean | Enable/disable movies file syncing |
-| `syncWW2` | boolean | Enable/disable WW2 file syncing |
+| Option           | Type    | Description                                   |
+| ---------------- | ------- | --------------------------------------------- |
+| `seriesFilePath` | string  | Path to series text file                      |
+| `moviesFilePath` | string  | Path to movies text file                      |
+| `ww2FilePath`    | string  | Path to WW2 movies text file                  |
+| `outputDir`      | string  | Directory for output files (default: `dist/`) |
+| `syncSeries`     | boolean | Enable/disable series file syncing            |
+| `syncMovies`     | boolean | Enable/disable movies file syncing            |
+| `syncWW2`        | boolean | Enable/disable WW2 file syncing               |
 
 ## Add Script
 
@@ -116,11 +142,11 @@ pnpm run add
    - Press Enter to skip
    - **Auto-skipped** if entry already exists
 
-6. **Add More?** (use arrow keys):
+7. **Add More?** (use arrow keys):
    - Yes: Add another entry (same file type)
    - No: Preview changes and confirm write
 
-7. **Preview and Confirm**:
+8. **Preview and Confirm**:
    - Review all additions grouped by section
    - Choose "Yes" to write changes or "No" to discard
 
@@ -181,14 +207,17 @@ Output written to: /Users/username/Repos/series-and-movies/dist/to-see-movies.tx
 ### Add Script Behavior
 
 #### New Entry
+
 - Entry is added to the beginning of the selected section
 - Hebrew name is required (unless skipped)
 
 #### Existing Entry - Same Section
+
 - **Series**: Seasons are merged and sorted
 - **Movies**: Error thrown (duplicate in same section)
 
 #### Existing Entry - Different Section
+
 - **Series with same seasons**: Entry is moved to target section
 - **Series with different seasons**: Entry remains in both sections
 - **Series with overlapping seasons**: Overlapping seasons removed from source section
@@ -197,14 +226,14 @@ Output written to: /Users/username/Repos/series-and-movies/dist/to-see-movies.tx
 
 ### Validation Rules
 
-1. **Name**: 
+1. **Name**:
    - Cannot be empty
    - Maximum 1000 characters
    - Automatically trimmed
 2. **Year** (Movies/WW2 only):
    - Must be a number between 1900-2100
    - Reused from existing entry if available
-3. **Seasons** (Series only): 
+3. **Seasons** (Series only):
    - Only numbers and commas allowed
    - No negative numbers or zero
    - Must be between 1-1000
@@ -215,7 +244,7 @@ Output written to: /Users/username/Repos/series-and-movies/dist/to-see-movies.tx
    - No English letters
    - Automatically trimmed
    - Reused from existing entry if available
-5. **Duplicate Detection**: 
+5. **Duplicate Detection**:
    - Case-insensitive matching
    - Name trimming applied
    - Movies: Smart year matching
@@ -236,6 +265,7 @@ pnpm run sync
 ### Sync Behavior
 
 #### Within Same Section
+
 - **Rule**: Keep first occurrence, remove rest
 - **Example**:
   ```
@@ -245,6 +275,7 @@ pnpm run sync
   ```
 
 #### Across Sections - Movies
+
 - **Rule**: Keep in highest priority section (TO SEE > OTHERS/ISRAEL > SEEN)
 - **Example**:
   ```
@@ -254,6 +285,7 @@ pnpm run sync
   ```
 
 #### Across Sections - Series (Same Seasons)
+
 - **Rule**: Keep in TO SEE section, remove from others
 - **Example**:
   ```
@@ -263,6 +295,7 @@ pnpm run sync
   ```
 
 #### Across Sections - Series (Overlapping Seasons)
+
 - **Rule**: TO SEE has priority, remove overlaps from lower priority sections
 - **Example**:
   ```
@@ -293,13 +326,14 @@ You can disable syncing for specific file types:
 // src/settings.ts
 export const settings = {
   // ...
-  syncSeries: false,  // Skip series file
-  syncMovies: true,   // Sync movies file
-  syncWW2: true,      // Sync WW2 file
+  syncSeries: false, // Skip series file
+  syncMovies: true, // Sync movies file
+  syncWW2: true, // Sync WW2 file
 };
 ```
 
 Output when a file is skipped:
+
 ```
 ===SCANNING FILES START===
 Skipping series (disabled in settings)
@@ -334,10 +368,13 @@ Entry 5
 ### Entry Format
 
 #### Series
+
 ```
 Name: seasons (Hebrew)
 ```
+
 Examples:
+
 - `Black Mirror: 1, 2, 3 (מראה שחורה)`
 - `Breaking Bad: 1, 2, 3, 4, 5 (שובר שורות)`
 - `Dahmer - Monster: The Jeffrey Dahmer Story: 1 (מפלצת: סיפורו של ג'פרי דאהמר)`
@@ -345,10 +382,13 @@ Examples:
 **Note**: Season numbers are extracted after the LAST colon, so series names can contain colons.
 
 #### Movies
+
 ```
 Name year (Hebrew)
 ```
+
 Examples:
+
 - `Inception 2010 (התחלה)`
 - `Interstellar 2014 (בין כוכבים)`
 - `Halloween 2018 (האלווין)`
@@ -419,6 +459,15 @@ pnpm run sync
 # Writes cleaned files to dist/
 ```
 
+## Extending the Application
+
+The Series and Movies Manager is designed to be easily extensible. You can add new file types or sections by following these steps:
+
+1. **Update Types**: Add new entry types or section types in `src/types/index.ts`.
+2. **Update Settings**: Add new file path configurations in `src/settings.ts`.
+3. **Extend Scanner/Remover**: Update `src/core/fileScanner.ts` and `src/core/duplicateRemover.ts` to handle the new types.
+4. **Update CLI**: Modify `src/scripts/add.ts` to include the new types in the interactive prompts.
+
 ## Troubleshooting
 
 ### Problem: "File not found" error
@@ -429,7 +478,8 @@ pnpm run sync
 
 **Cause**: You're trying to add a movie that already exists in the same section
 
-**Solution**: 
+**Solution**:
+
 - If you want to move it, select a different section
 - If you want to update it (series), add new seasons
 - If it's truly a duplicate, skip it
@@ -451,6 +501,7 @@ pnpm run sync
 **Cause**: All sync flags are disabled in settings
 
 **Solution**: Enable at least one sync flag in `src/settings.ts`:
+
 ```typescript
 syncSeries: true,  // Enable this
 syncMovies: true,  // Or this
@@ -499,10 +550,10 @@ Section priorities are hardcoded in `src/core/duplicateRemover.ts`:
 
 ```typescript
 const SECTION_PRIORITY: Record<SectionType, number> = {
-  'to-see': 3,    // Highest priority
-  'others': 2,
-  'israel': 2,
-  'seen': 1,      // Lowest priority
+  'to-see': 3, // Highest priority
+  others: 2,
+  israel: 2,
+  seen: 1, // Lowest priority
 };
 ```
 
@@ -539,3 +590,22 @@ pnpm test:watch
 ## Version History
 
 See CHANGELOG.md (if available) for version history and breaking changes.
+
+## External Resources
+
+- **GitHub Repository**: [orassayag/series-and-movies](https://github.com/orassayag/series-and-movies)
+- **TypeScript Documentation**: [typescriptlang.org](https://www.typescriptlang.org/docs/)
+- **Vitest Documentation**: [vitest.dev](https://vitest.dev/guide/)
+- **Inquirer.js Documentation**: [npm.im/inquirer](https://www.npmjs.com/package/inquirer)
+
+## Author
+
+- **Or Assayag** - _Initial work_ - [orassayag](https://github.com/orassayag)
+- Or Assayag <orassayag@gmail.com>
+- GitHub: https://github.com/orassayag
+- StackOverflow: https://stackoverflow.com/users/4442606/or-assayag?tab=profile
+- LinkedIn: https://linkedin.com/in/orassayag
+
+## Last Updated
+
+This document was last updated on May 13, 2026.

@@ -1,19 +1,124 @@
-# Series and Movies Manager
+# Series And Movies
 
 A TypeScript CLI tool to manage series and movies watchlists across text files with interactive prompts, bulk additions, and smart duplicate removal.
 
-Built in March 2026, this CLI utility streamlines watchlist management by organizing entries, preventing duplicates, supporting bulk updates, and providing an interactive interface for efficient tracking and maintenance of personal viewing lists across multiple files.
+Built in March 2026, This CLI utility streamlines watchlist management by organizing entries, preventing duplicates, supporting bulk updates, and providing an interactive interface for efficient tracking and maintenance of personal viewing lists across multiple files.
 
 ## Features
 
-- 🎬 **Bulk Addition**: Add multiple entries in one session with interactive prompts
-- 🔄 **Smart Sync**: Remove duplicates with intelligent section priority handling
-- 🛡️ **Safe Operation**: All operations write to `dist/` folder, original files remain untouched
-- 🎯 **Interactive CLI**: Arrow-key navigation for all selections
-- 📺 **Season Management**: Merge and track series seasons across different sections
-- 🌍 **Hebrew Support**: Optional Hebrew translations with RTL display formatting
-- ✅ **Type Safety**: Fully typed with TypeScript
-- 🧪 **Well Tested**: Comprehensive test coverage with 87 test cases
+### Core Capabilities
+
+- **Multi-File Watchlist Management**: Efficiently handle Series, Movies, and WW2 Movies in separate files.
+- **Smart Duplicate Removal**: Intelligent cleanup both within sections and across different sections (e.g., TO SEE vs SEEN).
+- **Interactive CLI Wizard**: Guided workflow for adding entries with bulk addition support.
+- **Season Merging & Tracking**: Automatic merging of series seasons across different lists.
+- **Hebrew Support**: Bi-directional text formatting for Hebrew titles in LTR terminals.
+
+### Technical Excellence
+
+- **Type Safety**: Built with TypeScript for robust development and maintenance.
+- **Modular Architecture**: Clean separation between core logic, interactive scripts, and utility functions.
+- **Comprehensive Testing**: Extensive test coverage using Vitest to ensure reliability of parsing and sync logic.
+- **Robust Validation**: Strict validation rules for entry names, release years, and season formats.
+- **Mermaid Visualizations**: Detailed documentation of application architecture and logic flows.
+
+### Developer Experience
+
+- **Interactive Development**: Fast feedback loops with interactive prompts.
+- **Rich Terminal UI**: Clear summaries, previews of changes, and informative success/error messages.
+- **Extensible Design**: Easily add new file types or sections by extending the core types and logic.
+- **Comprehensive Tooling**: Integrated linting, formatting, and testing workflows.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 18.0.0
+- pnpm >= 8.0.0
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/orassayag/series-and-movies.git
+cd series-and-movies
+```
+
+2. Install dependencies:
+
+```bash
+pnpm install
+```
+
+3. Build the project:
+
+```bash
+pnpm build
+```
+
+## Usage
+
+### Interactive Add Script
+
+Run the interactive wizard to add new series or movies to your lists:
+
+```bash
+pnpm run add
+```
+
+### Smart Sync Script
+
+Automatically remove duplicates and clean up your collection files:
+
+```bash
+pnpm run sync
+```
+
+## Available Scripts
+
+- `pnpm run add`: Start the interactive entry addition wizard.
+- `pnpm run sync`: Run the duplicate removal and cleanup script.
+- `pnpm run build`: Compile TypeScript source code to JavaScript in `dist/`.
+- `pnpm test`: Execute the Vitest test suite.
+- `pnpm run lint`: Run ESLint to check for code quality issues.
+- `pnpm run prettier:fix`: Automatically format code using Prettier.
+
+## Best Practices
+
+- **Review Before Writing**: Always check the preview summary before confirming writes in the add script.
+- **Regular Syncing**: Run the sync script periodically to keep your files clean and organized.
+- **Consistent Naming**: Use consistent names for series and movies to ensure accurate duplicate detection.
+- **Backup Files**: Keep backups of your source text files before running the sync script for the first time.
+
+## Architecture Principles
+
+- **Separation of Concerns**: Logic is divided into Core (business rules), Scripts (workflows), and Utils (helpers).
+- **Immutability**: Original files are never modified directly; all output is written to a `dist/` directory.
+- **Validation First**: All user input and file content are validated before processing.
+- **Interactive by Design**: Prefers user confirmation for destructive or major changes.
+
+## Directory Structure
+
+```
+series-and-movies/
+├── src/
+│   ├── core/           # Business logic (Scanners, Writers, Duplicate Removal)
+│   ├── scripts/        # CLI workflow implementations (Add, Sync)
+│   ├── types/          # TypeScript interface and type definitions
+│   ├── utils/          # Shared utility functions (Parsing, Validation)
+│   ├── main.ts         # Application entry point
+│   └── settings.ts     # Central configuration
+├── dist/               # Generated output files (Git ignored)
+└── src/**/__tests__/   # Unit and integration tests
+```
+
+## Design Patterns
+
+- **Strategy Pattern**: Different handling logic for Series vs. Movies.
+- **Command Pattern**: Encapsulated workflows for adding and syncing.
+- **Utility-First**: Extensive use of pure utility functions for data transformation.
+- **Singleton Settings**: Centralized configuration management.
 
 ## Architecture Overview
 
@@ -415,9 +520,10 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for gu
 
 ## Acknowledgments
 
-- Built with [TypeScript](https://www.typescriptlang.org/)
-- CLI powered by [Inquirer.js](https://github.com/SBoudrias/Inquirer.js)
-- Testing with [Vitest](https://vitest.dev/)
+- Built for educational and research purposes
+- Respects robots.txt and implements rate limiting
+- Uses user-agent rotation to avoid detection
+- Implements polite crawling practices
 
 ## Support
 

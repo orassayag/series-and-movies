@@ -2,16 +2,21 @@ import { writeFile } from 'fs/promises';
 import { ParsedFile, SectionType } from '../types';
 import { formatEntry } from '../utils';
 
-const SECTION_ORDER: SectionType[] = ['to-see', 'others', 'israel', 'seen'];
+const SECTION_ORDER: Exclude<SectionType, 'cancel'>[] = [
+  'to-see',
+  'others',
+  'israel',
+  'seen',
+];
 
-const SECTION_HEADERS: Record<SectionType, string> = {
+const SECTION_HEADERS: Record<Exclude<SectionType, 'cancel'>, string> = {
   'to-see': 'TO SEE:',
   seen: 'SEEN:',
   others: 'OTHERS TO SEE:',
   israel: 'ISRAEL:',
 };
 
-const SECTION_SEPARATORS: Record<SectionType, string> = {
+const SECTION_SEPARATORS: Record<Exclude<SectionType, 'cancel'>, string> = {
   'to-see': '=======',
   seen: '=====',
   others: '==============',
@@ -30,7 +35,12 @@ export class FileWriter {
       lines.push(SECTION_HEADERS[sectionType]);
       lines.push(SECTION_SEPARATORS[sectionType]);
       for (const entry of section.entries) {
-        const formattedEntry = formatEntry(entry.name, entry.year, entry.seasons, entry.hebrew);
+        const formattedEntry = formatEntry(
+          entry.name,
+          entry.year,
+          entry.seasons,
+          entry.hebrew
+        );
         lines.push(formattedEntry);
       }
       if (i < sectionsToWrite.length - 1) {

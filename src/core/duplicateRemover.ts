@@ -1,7 +1,13 @@
-import { ParsedFile, SectionType, EntryData, RemovedEntry, RemovalResult } from '../types';
+import {
+  ParsedFile,
+  SectionType,
+  EntryData,
+  RemovedEntry,
+  RemovalResult,
+} from '../types';
 import { seasonsEqual } from '../utils';
 
-const SECTION_PRIORITY: Record<SectionType, number> = {
+const SECTION_PRIORITY: Record<Exclude<SectionType, 'cancel'>, number> = {
   'to-see': 3,
   others: 2,
   israel: 2,
@@ -12,7 +18,10 @@ export class DuplicateRemover {
   removeDuplicates(parsedFile: ParsedFile): RemovalResult {
     const removedEntries: RemovedEntry[] = [];
     for (const [sectionType, section] of parsedFile.sections.entries()) {
-      const removed = this.removeDuplicatesInSection(section.entries, sectionType);
+      const removed = this.removeDuplicatesInSection(
+        section.entries,
+        sectionType
+      );
       removedEntries.push(...removed);
     }
     const crossSectionRemoved = this.removeCrossSectionDuplicates(parsedFile);
@@ -22,7 +31,10 @@ export class DuplicateRemover {
       cleanedFile: parsedFile,
     };
   }
-  private removeDuplicatesInSection(entries: EntryData[], section: SectionType): RemovedEntry[] {
+  private removeDuplicatesInSection(
+    entries: EntryData[],
+    section: SectionType
+  ): RemovedEntry[] {
     const removed: RemovedEntry[] = [];
     const seen = new Map<string, number>();
     const toRemove: number[] = [];
@@ -59,7 +71,9 @@ export class DuplicateRemover {
         if (!entryMap.has(normalizedName)) {
           entryMap.set(normalizedName, []);
         }
-        entryMap.get(normalizedName)!.push({ section: sectionType, entry, index });
+        entryMap
+          .get(normalizedName)!
+          .push({ section: sectionType, entry, index });
       });
     }
     for (const [, occurrences] of entryMap.entries()) {
@@ -88,29 +102,55 @@ export class DuplicateRemover {
     return removed;
   }
   private handleMovieDuplicates(
-    occurrences: Array<{ section: SectionType; entry: EntryData; index: number }>
+    occurrences: Array<{
+      section: SectionType;
+      entry: EntryData;
+      index: number;
+    }>
   ): Array<{ section: SectionType; entry: EntryData; index: number }> {
-    const highestPriority = Math.max(...occurrences.map((o) => SECTION_PRIORITY[o.section]));
-    return occurrences.filter((o) => SECTION_PRIORITY[o.section] < highestPriority);
+    const highestPriority = Math.max(
+      ...occurrences.map(
+        (o) => SECTION_PRIORITY[o.section as Exclude<SectionType, 'cancel'>]
+      )
+    );
+    return occurrences.filter(
+      (o) =>
+        SECTION_PRIORITY[o.section as Exclude<SectionType, 'cancel'>] <
+        highestPriority
+    );
   }
   private handleSeriesDuplicates(
-    occurrences: Array<{ section: SectionType; entry: EntryData; index: number }>,
+    occurrences: Array<{
+      section: SectionType;
+      entry: EntryData;
+      index: number;
+    }>,
     parsedFile: ParsedFile
   ): {
     toRemove: Array<{ section: SectionType; entry: EntryData; index: number }>;
     removed: RemovedEntry[];
   } {
-    const toRemove: Array<{ section: SectionType; entry: EntryData; index: number }> = [];
+    const toRemove: Array<{
+      section: SectionType;
+      entry: EntryData;
+      index: number;
+    }> = [];
     const removed: RemovedEntry[] = [];
     for (let i = 0; i < occurrences.length; i++) {
       for (let j = i + 1; j < occurrences.length; j++) {
         const first = occurrences[i];
         const second = occurrences[j];
-        const firstPriority = SECTION_PRIORITY[first.section];
-        const secondPriority = SECTION_PRIORITY[second.section];
+        const firstPriority =
+          SECTION_PRIORITY[first.section as Exclude<SectionType, 'cancel'>];
+        const secondPriority =
+          SECTION_PRIORITY[second.section as Exclude<SectionType, 'cancel'>];
         if (seasonsEqual(first.entry.seasons, second.entry.seasons)) {
           if (firstPriority < secondPriority) {
-            if (!toRemove.find((r) => r.section === first.section && r.index === first.index)) {
+            if (
+              !toRemove.find(
+                (r) => r.section === first.section && r.index === first.index
+              )
+            ) {
               toRemove.push(first);
               removed.push({
                 name: first.entry.name,
@@ -121,7 +161,11 @@ export class DuplicateRemover {
               });
             }
           } else if (secondPriority < firstPriority) {
-            if (!toRemove.find((r) => r.section === second.section && r.index === second.index)) {
+            if (
+              !toRemove.find(
+                (r) => r.section === second.section && r.index === second.index
+              )
+            ) {
               toRemove.push(second);
               removed.push({
                 name: second.entry.name,
@@ -133,11 +177,16 @@ export class DuplicateRemover {
             }
           }
         } else {
-          const hasOverlap = first.entry.seasons.some((s) => second.entry.seasons.includes(s));
+          const hasOverlap = first.entry.seasons.some((s) =>
+            second.entry.seasons.includes(s)
+          );
           if (hasOverlap && firstPriority !== secondPriority) {
-            const lowerPriorityOccurrence = firstPriority < secondPriority ? first : second;
+            const lowerPriorityOccurrence =
+              firstPriority < secondPriority ? first : second;
             const higherPrioritySeasons =
-              firstPriority > secondPriority ? first.entry.seasons : second.entry.seasons;
+              firstPriority > secondPriority
+                ? first.entry.seasons
+                : second.entry.seasons;
             const uniqueSeasons = lowerPriorityOccurrence.entry.seasons.filter(
               (s) => !higherPrioritySeasons.includes(s)
             );
@@ -159,9 +208,9 @@ export class DuplicateRemover {
                 });
               }
             } else {
-              const actualEntry = parsedFile.sections.get(lowerPriorityOccurrence.section)?.entries[
-                lowerPriorityOccurrence.index
-              ];
+              const actualEntry = parsedFile.sections.get(
+                lowerPriorityOccurrence.section
+              )?.entries[lowerPriorityOccurrence.index];
               if (actualEntry) {
                 actualEntry.seasons = uniqueSeasons.sort((a, b) => a - b);
               }

@@ -1,4 +1,7 @@
 @echo off
-cd /d "C:\Or\web\projects\series-and-movies"
-pnpm run add
+setlocal
+cd /d "%~dp0"
+set TERM=xterm
+call pnpm exec tsx src/main.ts add
 pause
+endlocal

@@ -1,27 +1,39 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { add } from '../add.js';
-import { FileScanner, CliPrompt, EntryManager, FileWriter } from '../../core';
+import {
+  FileScanner,
+  CliPrompt,
+  EntryManager,
+  FileWriter,
+} from '../../core/index.js';
 
-vi.mock('../../core', () => ({
-  FileScanner: vi.fn().mockImplementation(() => ({
-    scanFile: vi.fn().mockResolvedValue({ sections: new Map() }),
-  })),
-  CliPrompt: vi.fn().mockImplementation(() => ({
-    promptFileType: vi.fn().mockResolvedValue('series'),
-    promptSection: vi.fn().mockResolvedValue('to-see'),
-    promptName: vi.fn().mockResolvedValue('New Series'),
-    promptSeasons: vi.fn().mockResolvedValue([1]),
-    promptHebrew: vi.fn().mockResolvedValue(''),
-    promptAddMore: vi.fn().mockResolvedValue(false),
-    promptConfirmWrite: vi.fn().mockResolvedValue(true),
-  })),
-  EntryManager: vi.fn().mockImplementation(() => ({
-    addOrUpdateEntry: vi.fn(),
-  })),
-  FileWriter: vi.fn().mockImplementation(() => ({
-    writeFile: vi.fn().mockResolvedValue(undefined),
-  })),
-}));
+vi.mock('../../core/index.js', () => {
+  const FileScanner = vi.fn();
+  FileScanner.prototype.scanFile = vi.fn();
+
+  const CliPrompt = vi.fn();
+  CliPrompt.prototype.promptFileType = vi.fn();
+  CliPrompt.prototype.promptSection = vi.fn();
+  CliPrompt.prototype.promptName = vi.fn();
+  CliPrompt.prototype.promptYear = vi.fn();
+  CliPrompt.prototype.promptSeasons = vi.fn();
+  CliPrompt.prototype.promptHebrew = vi.fn();
+  CliPrompt.prototype.promptAddMore = vi.fn();
+  CliPrompt.prototype.promptConfirmWrite = vi.fn();
+
+  const EntryManager = vi.fn();
+  EntryManager.prototype.addOrUpdateEntry = vi.fn();
+
+  const FileWriter = vi.fn();
+  FileWriter.prototype.writeFile = vi.fn();
+
+  return {
+    FileScanner,
+    CliPrompt,
+    EntryManager,
+    FileWriter,
+  };
+});
 
 vi.mock('../../settings.js', () => ({
   settings: {
@@ -36,70 +48,62 @@ describe('add script', () => {
     vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    vi.mocked(FileScanner.prototype.scanFile).mockResolvedValue({
+      sections: new Map(),
+    });
+    vi.mocked(CliPrompt.prototype.promptFileType).mockResolvedValue('series');
+    vi.mocked(CliPrompt.prototype.promptSection).mockResolvedValue('to-see');
+    vi.mocked(CliPrompt.prototype.promptName).mockResolvedValue('New Series');
+    vi.mocked(CliPrompt.prototype.promptSeasons).mockResolvedValue([1]);
+    vi.mocked(CliPrompt.prototype.promptHebrew).mockResolvedValue('');
+    vi.mocked(CliPrompt.prototype.promptAddMore).mockResolvedValue(false);
+    vi.mocked(CliPrompt.prototype.promptConfirmWrite).mockResolvedValue(true);
+    vi.mocked(FileWriter.prototype.writeFile).mockResolvedValue(undefined);
   });
 
   it('should add a series successfully', async () => {
     await add();
 
-    const scannerInstance = vi.mocked(FileScanner).mock.results[0].value;
-    expect(scannerInstance.scanFile).toHaveBeenCalled();
-
-    const promptInstance = vi.mocked(CliPrompt).mock.results[0].value;
-    expect(promptInstance.promptFileType).toHaveBeenCalled();
-    expect(promptInstance.promptName).toHaveBeenCalled();
-
-    const managerInstance = vi.mocked(EntryManager).mock.results[0].value;
-    expect(managerInstance.addOrUpdateEntry).toHaveBeenCalled();
-
-    const writerInstance = vi.mocked(FileWriter).mock.results[0].value;
-    expect(writerInstance.writeFile).toHaveBeenCalled();
+    expect(FileScanner.prototype.scanFile).toHaveBeenCalled();
+    expect(CliPrompt.prototype.promptFileType).toHaveBeenCalled();
+    expect(CliPrompt.prototype.promptName).toHaveBeenCalled();
+    expect(EntryManager.prototype.addOrUpdateEntry).toHaveBeenCalled();
+    expect(FileWriter.prototype.writeFile).toHaveBeenCalled();
   });
 
   it('should handle cancel in section prompt', async () => {
-    const promptInstanceMock = {
-      promptFileType: vi.fn().mockResolvedValue('series'),
-      promptSection: vi.fn().mockResolvedValue('cancel'),
-      promptAddMore: vi.fn().mockResolvedValue(false),
-      promptConfirmWrite: vi.fn().mockResolvedValue(false),
-    };
-    vi.mocked(CliPrompt).mockImplementation(() => promptInstanceMock as unknown as CliPrompt);
+    vi.mocked(CliPrompt.prototype.promptSection).mockResolvedValue('cancel');
 
     await add();
 
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('No Series were added'));
+    expect(console.log).toHaveBeenCalledWith(
+      expect.stringContaining('No Series were added')
+    );
   });
 
   it('should handle discard changes', async () => {
-    const promptInstanceMock = {
-      promptFileType: vi.fn().mockResolvedValue('movie'),
-      promptSection: vi.fn().mockResolvedValue('to-see'),
-      promptName: vi.fn().mockResolvedValue('Movie'),
-      promptYear: vi.fn().mockResolvedValue(2024),
-      promptHebrew: vi.fn().mockResolvedValue(''),
-      promptAddMore: vi.fn().mockResolvedValue(false),
-      promptConfirmWrite: vi.fn().mockResolvedValue(false),
-    };
-    vi.mocked(CliPrompt).mockImplementation(() => promptInstanceMock as unknown as CliPrompt);
+    vi.mocked(CliPrompt.prototype.promptFileType).mockResolvedValue('movie');
+    vi.mocked(CliPrompt.prototype.promptConfirmWrite).mockResolvedValue(false);
 
     await add();
 
-    expect(FileWriter).not.toHaveBeenCalled();
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Changes discarded'));
+    expect(FileWriter.prototype.writeFile).not.toHaveBeenCalled();
+    expect(console.log).toHaveBeenCalledWith(
+      expect.stringContaining('Changes discarded')
+    );
   });
 
   it('should handle errors during adding', async () => {
-    const promptInstanceMock = {
-      promptFileType: vi.fn().mockResolvedValue('series'),
-      promptSection: vi.fn().mockResolvedValue('to-see'),
-      promptName: vi.fn().mockRejectedValue(new Error('Prompt failed')),
-      promptAddMore: vi.fn().mockResolvedValue(false),
-      promptConfirmWrite: vi.fn().mockResolvedValue(false),
-    };
-    vi.mocked(CliPrompt).mockImplementation(() => promptInstanceMock as unknown as CliPrompt);
+    vi.mocked(CliPrompt.prototype.promptName).mockRejectedValue(
+      new Error('Prompt failed')
+    );
 
     await add();
 
-    expect(console.error).toHaveBeenCalledWith(expect.stringContaining('Error: Prompt failed'));
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringContaining('Error: Prompt failed')
+    );
   });
 
   it('should handle movie addition with year from existing entry', async () => {
@@ -109,34 +113,21 @@ describe('add script', () => {
           'seen',
           {
             header: 'SEEN:',
-            entries: [{ name: 'Inception 2010', year: 2010, seasons: [], hebrew: '' }],
+            entries: [
+              { name: 'Inception 2010', year: 2010, seasons: [], hebrew: '' },
+            ],
           },
         ],
       ]),
     };
-    vi.mocked(FileScanner).mockImplementation(
-      () =>
-        ({
-          scanFile: vi.fn().mockResolvedValue(existingFile),
-        }) as unknown as FileScanner
-    );
-
-    const promptInstanceMock = {
-      promptFileType: vi.fn().mockResolvedValue('movie'),
-      promptSection: vi.fn().mockResolvedValue('to-see'),
-      promptName: vi.fn().mockResolvedValue('Inception'),
-      promptYear: vi.fn(), // Should NOT be called
-      promptHebrew: vi.fn().mockResolvedValue(''),
-      promptAddMore: vi.fn().mockResolvedValue(false),
-      promptConfirmWrite: vi.fn().mockResolvedValue(true),
-    };
-    vi.mocked(CliPrompt).mockImplementation(() => promptInstanceMock as unknown as CliPrompt);
+    vi.mocked(FileScanner.prototype.scanFile).mockResolvedValue(existingFile);
+    vi.mocked(CliPrompt.prototype.promptFileType).mockResolvedValue('movie');
+    vi.mocked(CliPrompt.prototype.promptName).mockResolvedValue('Inception');
 
     await add();
 
-    expect(promptInstanceMock.promptYear).not.toHaveBeenCalled();
-    const managerInstance = vi.mocked(EntryManager).mock.results[0].value;
-    expect(managerInstance.addOrUpdateEntry).toHaveBeenCalledWith(
+    expect(CliPrompt.prototype.promptYear).not.toHaveBeenCalled();
+    expect(EntryManager.prototype.addOrUpdateEntry).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
         name: 'Inception 2010',
@@ -146,16 +137,10 @@ describe('add script', () => {
   });
 
   it('should throw error if entry already added in same session', async () => {
-    const promptInstanceMock = {
-      promptFileType: vi.fn().mockResolvedValue('series'),
-      promptSection: vi.fn().mockResolvedValue('to-see'),
-      promptName: vi.fn().mockResolvedValue('Duplicate'),
-      promptSeasons: vi.fn().mockResolvedValue([1]),
-      promptHebrew: vi.fn().mockResolvedValue(''),
-      promptAddMore: vi.fn().mockResolvedValueOnce(true).mockResolvedValueOnce(false),
-      promptConfirmWrite: vi.fn().mockResolvedValue(true),
-    };
-    vi.mocked(CliPrompt).mockImplementation(() => promptInstanceMock as unknown as CliPrompt);
+    vi.mocked(CliPrompt.prototype.promptName).mockResolvedValue('Duplicate');
+    vi.mocked(CliPrompt.prototype.promptAddMore)
+      .mockResolvedValueOnce(true)
+      .mockResolvedValueOnce(false);
 
     await add();
 
@@ -171,28 +156,17 @@ describe('add script', () => {
           'to-see',
           {
             header: 'TO SEE:',
-            entries: [{ name: 'Inception 2010', year: 2010, seasons: [], hebrew: '' }],
+            entries: [
+              { name: 'Inception 2010', year: 2010, seasons: [], hebrew: '' },
+            ],
           },
         ],
       ]),
     };
-    vi.mocked(FileScanner).mockImplementation(
-      () =>
-        ({
-          scanFile: vi.fn().mockResolvedValue(existingFile),
-        }) as unknown as FileScanner
-    );
-
-    const promptInstanceMock = {
-      promptFileType: vi.fn().mockResolvedValue('movie'),
-      promptSection: vi.fn().mockResolvedValue('to-see'),
-      promptName: vi.fn().mockResolvedValue('Inception'),
-      promptYear: vi.fn().mockResolvedValue(2010),
-      promptHebrew: vi.fn().mockResolvedValue(''),
-      promptAddMore: vi.fn().mockResolvedValue(false),
-      promptConfirmWrite: vi.fn().mockResolvedValue(true),
-    };
-    vi.mocked(CliPrompt).mockImplementation(() => promptInstanceMock as unknown as CliPrompt);
+    vi.mocked(FileScanner.prototype.scanFile).mockResolvedValue(existingFile);
+    vi.mocked(CliPrompt.prototype.promptFileType).mockResolvedValue('movie');
+    vi.mocked(CliPrompt.prototype.promptName).mockResolvedValue('Inception');
+    vi.mocked(CliPrompt.prototype.promptYear).mockResolvedValue(2010);
 
     await add();
 

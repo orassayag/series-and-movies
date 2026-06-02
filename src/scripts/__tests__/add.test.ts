@@ -6,6 +6,7 @@ import {
   EntryManager,
   FileWriter,
 } from '../../core/index.js';
+import { ParsedFile, SectionType } from '../../types/index.js';
 
 vi.mock('../../core/index.js', () => {
   const FileScanner = vi.fn();
@@ -107,10 +108,10 @@ describe('add script', () => {
   });
 
   it('should handle movie addition with year from existing entry', async () => {
-    const existingFile = {
+    const existingFile: ParsedFile = {
       sections: new Map([
         [
-          'seen',
+          'seen' as SectionType,
           {
             header: 'SEEN:',
             entries: [
@@ -150,10 +151,10 @@ describe('add script', () => {
   });
 
   it('should throw error if movie already exists in target section', async () => {
-    const existingFile = {
+    const existingFile: ParsedFile = {
       sections: new Map([
         [
-          'to-see',
+          'to-see' as SectionType,
           {
             header: 'TO SEE:',
             entries: [

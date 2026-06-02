@@ -35,15 +35,15 @@ for (let i = 0; i < lines.length; i++) {
 
 const extractedMovies: Set<string> = new Set();
 
-needToBeOrganized.forEach(line => {
+needToBeOrganized.forEach((line) => {
   const movieMatches = [
     /^([A-Z][A-Za-z0-9\s:&'',.-]+?)(?:\s*\(?\d{4}\)?)?$/,
     /["']([^"']+)["']/g,
     /^\d+\.\s*(.+?)(?:\s*!+)?$/,
     /^-+\s*(.+)$/,
-    /^([A-Z][A-Za-z\s]+)/
+    /^([A-Z][A-Za-z\s]+)/,
   ];
-  
+
   for (const pattern of movieMatches) {
     if (pattern.global) {
       let match;
@@ -57,13 +57,17 @@ needToBeOrganized.forEach(line => {
       const match = line.match(pattern);
       if (match && match[1]) {
         const movieName = match[1].trim();
-        if (movieName && movieName.length > 2 && !movieName.includes('should definitely replace')) {
+        if (
+          movieName &&
+          movieName.length > 2 &&
+          !movieName.includes('should definitely replace')
+        ) {
           extractedMovies.add(movieName);
         }
       }
     }
   }
-  
+
   const cleanedLine = line
     .replace(/^-+/, '')
     .replace(/^\d+\.\s*/, '')
@@ -72,19 +76,43 @@ needToBeOrganized.forEach(line => {
     .replace(/\(\d{4}\)/, '')
     .replace(/\(.*?\)/, '')
     .trim();
-  
-  if (cleanedLine && cleanedLine.length > 3 && !/^(and|also|how about|why|disappointed|shameful|go check|watchmojo|pffft|you forgot)/i.test(cleanedLine)) {
+
+  if (
+    cleanedLine &&
+    cleanedLine.length > 3 &&
+    !/^(and|also|how about|why|disappointed|shameful|go check|watchmojo|pffft|you forgot)/i.test(
+      cleanedLine
+    )
+  ) {
     extractedMovies.add(cleanedLine);
   }
 });
 
 const moviesToAdd: string[] = [];
 
-extractedMovies.forEach(movie => {
+extractedMovies.forEach((movie) => {
   const movieLower = movie.toLowerCase();
-  const isInToSee = toSeeMovies.some(existing => existing.includes(movieLower) || movieLower.includes(existing.split(/\s+\d{4}/)[0].toLowerCase().trim()));
-  const isInSeen = seenMovies.some(existing => existing.includes(movieLower) || movieLower.includes(existing.split(/\s+\d{4}/)[0].toLowerCase().trim()));
-  
+  const isInToSee = toSeeMovies.some(
+    (existing) =>
+      existing.includes(movieLower) ||
+      movieLower.includes(
+        existing
+          .split(/\s+\d{4}/)[0]
+          .toLowerCase()
+          .trim()
+      )
+  );
+  const isInSeen = seenMovies.some(
+    (existing) =>
+      existing.includes(movieLower) ||
+      movieLower.includes(
+        existing
+          .split(/\s+\d{4}/)[0]
+          .toLowerCase()
+          .trim()
+      )
+  );
+
   if (!isInToSee && !isInSeen && movie.length > 3) {
     moviesToAdd.push(movie);
   }
@@ -92,7 +120,9 @@ extractedMovies.forEach(movie => {
 
 moviesToAdd.sort();
 
-console.log(`Found ${extractedMovies.size} unique movies in NEED TO BE ORGANIZED`);
+console.log(
+  `Found ${extractedMovies.size} unique movies in NEED TO BE ORGANIZED`
+);
 console.log(`${moviesToAdd.length} movies are not in TO SEE or SEEN sections`);
 console.log('\nMovies to add:');
-moviesToAdd.forEach(movie => console.log(movie));
+moviesToAdd.forEach((movie) => console.log(movie));

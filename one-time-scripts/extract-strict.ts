@@ -21,7 +21,7 @@ for (let i = 0; i < lines.length; i++) {
     currentSection = 'NEED_TO_BE_ORGANIZED';
     continue;
   }
-  
+
   if (line && line !== '=======' && line !== '===================') {
     if (currentSection === 'TO_SEE' && line) {
       toSeeMoviesSet.add(line);
@@ -48,26 +48,26 @@ function normalizeTitle(title: string): string {
 
 function extractMovieTitles(lines: string[]): Map<string, string> {
   const movies = new Map<string, string>();
-  
-  lines.forEach(line => {
+
+  lines.forEach((line) => {
     const quotedMatches = [...line.matchAll(/"([A-Z][^"]{2,48})"/g)];
-    quotedMatches.forEach(match => {
+    quotedMatches.forEach((match) => {
       const title = match[1].trim();
       const normalized = normalizeTitle(title);
       if (normalized.length > 2 && !movies.has(normalized)) {
         movies.set(normalized, title);
       }
     });
-    
+
     const singleQuoteMatches = [...line.matchAll(/''([A-Z][^'']{2,48})''/g)];
-    singleQuoteMatches.forEach(match => {
+    singleQuoteMatches.forEach((match) => {
       const title = match[1].trim();
       const normalized = normalizeTitle(title);
       if (normalized.length > 2 && !movies.has(normalized)) {
         movies.set(normalized, title);
       }
     });
-    
+
     const dashListMatch = line.match(/^-([A-Z][A-Za-z0-9\s':&-]{2,48})$/);
     if (dashListMatch) {
       const title = dashListMatch[1].trim();
@@ -77,8 +77,10 @@ function extractMovieTitles(lines: string[]): Map<string, string> {
       }
       return;
     }
-    
-    const yearMatch = line.match(/^([A-Z][A-Za-z0-9\s':&-]{2,48}?)\s*[\(]?\d{4}[\)]?/);
+
+    const yearMatch = line.match(
+      /^([A-Z][A-Za-z0-9\s':&-]{2,48}?)\s*[\(]?\d{4}[\)]?/
+    );
     if (yearMatch) {
       const title = yearMatch[1].trim();
       const normalized = normalizeTitle(title);
@@ -87,21 +89,28 @@ function extractMovieTitles(lines: string[]): Map<string, string> {
       }
       return;
     }
-    
-    const numberedMatch = line.match(/^\d+[\.)]\s*([A-Z][A-Za-z0-9\s':&-]{2,48})$/);
+
+    const numberedMatch = line.match(
+      /^\d+[\.)]\s*([A-Z][A-Za-z0-9\s':&-]{2,48})$/
+    );
     if (numberedMatch) {
-      const title = numberedMatch[1].trim().replace(/[!?]+$/, '').trim();
+      const title = numberedMatch[1]
+        .trim()
+        .replace(/[!?]+$/, '')
+        .trim();
       const normalized = normalizeTitle(title);
       if (!movies.has(normalized)) {
         movies.set(normalized, title);
       }
       return;
     }
-    
+
     const standAloneMatch = line.match(/^([A-Z][A-Za-z0-9\s':&-]{2,48})$/);
-    if (standAloneMatch && 
-        !line.includes(',') &&
-        line.split(/\s+/).length <= 8) {
+    if (
+      standAloneMatch &&
+      !line.includes(',') &&
+      line.split(/\s+/).length <= 8
+    ) {
       const title = standAloneMatch[1].trim();
       const normalized = normalizeTitle(title);
       if (!movies.has(normalized)) {
@@ -109,18 +118,20 @@ function extractMovieTitles(lines: string[]): Map<string, string> {
       }
     }
   });
-  
+
   return movies;
 }
 
 function isInList(title: string, list: Set<string>): boolean {
   const normalized = normalizeTitle(title);
-  
+
   for (const existing of list) {
     const existingNorm = normalizeTitle(existing);
-    if (normalized === existingNorm || 
-        normalized.includes(existingNorm) || 
-        existingNorm.includes(normalized)) {
+    if (
+      normalized === existingNorm ||
+      normalized.includes(existingNorm) ||
+      existingNorm.includes(normalized)
+    ) {
       return true;
     }
   }
@@ -140,19 +151,26 @@ for (const [normalized, title] of moviesMap) {
   }
 }
 
-const finalList = Array.from(finalMap.values())
-  .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+const finalList = Array.from(finalMap.values()).sort((a, b) =>
+  a.localeCompare(b, undefined, { sensitivity: 'base' })
+);
 
 console.log(`\nFinal count: ${finalList.length} unique movies to add\n`);
 console.log('All movies:');
-finalList.forEach(m => console.log(`  ${m}`));
+finalList.forEach((m) => console.log(`  ${m}`));
 
-fs.writeFileSync('/Users/orassayag/Repos/series-and-movies/movies-extracted-clean.txt', finalList.join('\n'));
+fs.writeFileSync(
+  '/Users/orassayag/Repos/series-and-movies/movies-extracted-clean.txt',
+  finalList.join('\n')
+);
 console.log(`\nSaved to movies-extracted-clean.txt`);
 
-const bridgeCount = finalList.filter(m => normalizeTitle(m).includes('bridge') && normalizeTitle(m).includes('far')).length;
+const bridgeCount = finalList.filter(
+  (m) =>
+    normalizeTitle(m).includes('bridge') && normalizeTitle(m).includes('far')
+).length;
 console.log(`\nBridge Too Far variations: ${bridgeCount}`);
 
-if (finalList.some(m => normalizeTitle(m).includes('panfilov'))) {
-  console.log('✓ Panfilov\'s men is in the list!');
+if (finalList.some((m) => normalizeTitle(m).includes('panfilov'))) {
+  console.log("✓ Panfilov's men is in the list!");
 }

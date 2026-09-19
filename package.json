@@ -86,17 +86,17 @@
     "enquirer": "^2.4.1"
   },
   "devDependencies": {
-    "@rolldown/binding-win32-x64-msvc": "^1.2.6",
-    "@types/node": "^26.4.0",
-    "@typescript-eslint/eslint-plugin": "^8.68.0",
-    "@typescript-eslint/parser": "^8.68.0",
-    "@vitest/coverage-istanbul": "^4.1.11",
+    "@rolldown/binding-win32-x64-msvc": "^1.2.9",
+    "@types/node": "^26.6.2",
+    "@typescript-eslint/eslint-plugin": "^8.70.0",
+    "@typescript-eslint/parser": "^8.70.0",
+    "@vitest/coverage-istanbul": "^5.0.1",
     "cross-env": "^10.1.0",
-    "eslint": "^10.9.1",
-    "prettier": "^3.9.6",
-    "tsx": "^4.23.12",
+    "eslint": "^10.11.0",
+    "prettier": "^3.9.8",
+    "tsx": "^4.23.13",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.1"
   },
   "engines": {
     "node": ">=20.0.0",

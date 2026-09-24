@@ -86,7 +86,7 @@
     "enquirer": "^2.4.1"
   },
   "devDependencies": {
-    "@rolldown/binding-win32-x64-msvc": "^1.2.10",
+    "@rolldown/binding-win32-x64-msvc": "^1.2.11",
     "@types/node": "^26.6.2",
     "@typescript-eslint/eslint-plugin": "^8.70.1",
     "@typescript-eslint/parser": "^8.70.1",

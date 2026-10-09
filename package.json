@@ -87,7 +87,7 @@
   },
   "devDependencies": {
     "@rolldown/binding-win32-x64-msvc": "^1.2.13",
-    "@types/node": "^26.6.4",
+    "@types/node": "^26.6.5",
     "@typescript-eslint/eslint-plugin": "^8.71.1",
     "@typescript-eslint/parser": "^8.71.1",
     "@vitest/coverage-istanbul": "^5.0.3",
